@@ -4,6 +4,82 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@drawable/background"
   tools:context=".PinCode">
+
+  <View
+    android:id="@+id/opacityFilter"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_alignParentBottom="true"
+    android:alpha="0.7"
+    android:background="@color/colorPrimary"
+    android:textAlignment="center"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0"></View>
+
+  <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="0dp"
+    android:layout_height="300dp"
+    android:layout_marginStart="42dp"
+    android:layout_marginEnd="42dp"
+    android:elevation="5dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardPreventCornerOverlap="false"
+    card_view:layout_constraintBottom_toBottomOf="parent"
+    card_view:layout_constraintEnd_toEndOf="parent"
+    card_view:layout_constraintHorizontal_bias="1.0"
+    card_view:layout_constraintStart_toStartOf="parent"
+    card_view:layout_constraintTop_toTopOf="parent"
+    card_view:layout_constraintVertical_bias="0.527">
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_centerHorizontal="true"
+      android:orientation="vertical">
+
+
+      <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginBottom="163dp"
+        android:fontFamily="monospace"
+        android:paddingHorizontal="5dp"
+        android:text="Please enter a complemetary pincode!"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+      <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="171dp"
+        android:layout_marginBottom="84dp"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="numberPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    </RelativeLayout>
+
+  </android.support.v7.widget.CardView>
+
+
+
 
 </android.support.constraint.ConstraintLayout>
