@@ -80,11 +80,11 @@
           android:layout_marginTop="10dp"
           android:layout_marginBottom="12dp"
           android:text="Enable face lock"
-          android:fontFamily="monospace"
+          android:fontFamily="sans-serif"
           />
 
         <Switch
-          android:id="@+id/switch1"
+          android:id="@+id/enableLockSwitch"
           android:layout_width="80dp"
           android:layout_height="wrap_content"
           android:layout_alignParentTop="true"
@@ -96,7 +96,8 @@
           android:layout_marginBottom="9dp"
           android:layout_toEndOf="@+id/textView"
           tools:layout_editor_absoluteX="242dp"
-          tools:layout_editor_absoluteY="323dp" />
+          tools:layout_editor_absoluteY="323dp"
+          />
       </RelativeLayout>
     </RelativeLayout>
     <!--<TextView
