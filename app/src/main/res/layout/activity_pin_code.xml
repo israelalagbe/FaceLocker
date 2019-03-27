@@ -9,7 +9,7 @@
 
   <View
     android:id="@+id/opacityFilter"
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
     android:layout_height="0dp"
     android:layout_alignParentBottom="true"
     android:alpha="0.7"
@@ -39,7 +39,6 @@
     card_view:layout_constraintVertical_bias="0.527">
 
     <RelativeLayout
-      android:id="@+id/continueBtn"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_centerHorizontal="true"
@@ -56,11 +55,12 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="86dp"
         android:layout_marginBottom="163dp"
-        android:fontFamily="monospace"
+        android:fontFamily="@font/roboto_thin"
         android:paddingHorizontal="5dp"
         android:text="Please enter a complemetary pincode!"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        />
 
       <EditText
         android:id="@+id/editText"
@@ -74,13 +74,15 @@
         android:ems="10"
         android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        />
     </RelativeLayout>
 
   </android.support.v7.widget.CardView>
 
   <Button
-    android:id="@+id/button"
+    android:id="@+id/continueBtn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
