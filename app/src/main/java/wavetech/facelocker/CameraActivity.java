@@ -7,10 +7,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 //OpenCV Java Classes
+import com.kaopiz.kprogresshud.KProgressHUD;
+
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -21,6 +24,10 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.BaseLoaderCallback;
@@ -33,6 +40,11 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 
 public class CameraActivity extends AppCompatActivity implements CvCameraViewListener2 {
@@ -51,6 +63,14 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
   Mat mRgbaF;
   Mat mRgbaT;
 
+
+  private CascadeClassifier cascadeClassifier;
+  private Mat grayscaleImage;
+  private int absoluteFaceSize;
+
+  //Initialize the loader
+  private KProgressHUD progressLoader;
+
   //Now, lets call OpenCV manager to help our app communicate with android phone to make OpenCV work
   private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
     @Override
@@ -59,7 +79,8 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
         case LoaderCallbackInterface.SUCCESS:
         {
           Log.i(TAG, "OpenCV loaded successfully");
-          mOpenCvCameraView.enableView();
+          initializeOpenCVDependencies();
+//          mOpenCvCameraView.enableView();
           //System.loadLibrary("detection_based_tracker");
 
         } break;
@@ -70,17 +91,57 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
       }
     }
   };
+  private void initializeOpenCVDependencies() {
+
+    try {
+      // Copy the resource into a temp file so OpenCV can load it
+      InputStream is = getResources().openRawResource(R.raw.lbpcascade_frontalface);
+      File cascadeDir = getDir("cascade", getApplicationContext().MODE_PRIVATE);
+      File mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
+      FileOutputStream os = new FileOutputStream(mCascadeFile);
+
+
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+      while ((bytesRead = is.read(buffer)) != -1) {
+        os.write(buffer, 0, bytesRead);
+      }
+      is.close();
+      os.close();
+
+      // Load the cascade classifier
+      cascadeClassifier = new CascadeClassifier(mCascadeFile.getAbsolutePath());
+    } catch (Exception e) {
+      Log.e("OpenCVActivity", "Error loading cascade", e);
+    }
+
+    // And we are ready to go
+    mOpenCvCameraView.enableView();
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_camera);
+    //Hide the action bar
+    getSupportActionBar().hide();
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     askForPermissions();
     mOpenCvCameraView = (JavaCameraView) findViewById(R.id.camera_view);
+    mOpenCvCameraView.setCameraIndex(1);
     mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
     mOpenCvCameraView.setCvCameraViewListener(this);
 
+    progressLoader = KProgressHUD.create(CameraActivity.this)
+      .setStyle(KProgressHUD.Style.BAR_DETERMINATE)
+      .setLabel("Registering Face")
+      .setMaxProgress(100)
+      .setCancellable(false)
+      .show();
+
   }
+
+
   private void askForPermissions(){
     // Here, thisActivity is the current activity
     if (ContextCompat.checkSelfPermission(this,
@@ -153,9 +214,28 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
     // Rotate mRgba 90 degrees
     Core.transpose(mRgba, mRgbaT);
     Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
-    Core.flip(mRgbaF, mRgba, 1 );
+    //Flip by 180 degrees
+    Core.flip(mRgbaF, mRgba, -1 );
 
-    return mRgba; // This function must return
+    // Create a grayscale image
+    Imgproc.cvtColor(mRgba, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
+
+    MatOfRect faces = new MatOfRect();
+
+    // Use the classifier to detect faces
+    if (cascadeClassifier != null) {
+      cascadeClassifier.detectMultiScale(grayscaleImage, faces, 1.1, 2, 2,
+        new Size(absoluteFaceSize, absoluteFaceSize), new Size());
+    }
+
+    // If there are any faces found, draw a rectangle around it
+    Rect[] facesArray = faces.toArray();
+    for (int i = 0; i <facesArray.length; i++) {
+      Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+      progressLoader.setProgress(50);
+    }
+
+    return mRgba;
   }
 
 
@@ -165,6 +245,11 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
     mRgba = new Mat(height, width, CvType.CV_8UC4);
     mRgbaF = new Mat(height, width, CvType.CV_8UC4);
     mRgbaT = new Mat(width, width, CvType.CV_8UC4);
+
+    grayscaleImage = new Mat(height, width, CvType.CV_8UC4);
+
+    // The faces will be a 20% of the height of the screen
+    absoluteFaceSize = (int) (height * 0.2);
   }
   //Destroy image data when you stop camera preview on your phone screen
   @Override
