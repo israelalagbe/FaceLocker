@@ -49,7 +49,7 @@ import java.io.InputStream;
 
 public class CameraActivity extends AppCompatActivity implements CvCameraViewListener2 {
   // Used for logging success or failure messages
-  private static final String TAG = "OCVSample::Activity";
+  public static final String TAG = "OCVSample::Activity";
 
   // Loads camera view of OpenCV for us to use. This lets us see using OpenCV
   private CameraBridgeViewBase mOpenCvCameraView;
