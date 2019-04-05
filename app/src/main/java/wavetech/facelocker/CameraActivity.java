@@ -11,7 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.Toast;
 //OpenCV Java Classes
+import com.andrognito.patternlockview.PatternLockView;
+import com.andrognito.patternlockview.listener.PatternLockViewListener;
+import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.opencv.android.JavaCameraView;
@@ -44,7 +48,9 @@ import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 
 public class CameraActivity extends AppCompatActivity implements CvCameraViewListener2 {
@@ -53,6 +59,9 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
 
   // Loads camera view of OpenCV for us to use. This lets us see using OpenCV
   private CameraBridgeViewBase mOpenCvCameraView;
+
+
+  private  FaceRegister faceRegister=new FaceRegister();
 
   // Used in Camera selection from menu (when implemented)
   private boolean              mIsJavaCamera = true;
@@ -91,6 +100,10 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
       }
     }
   };
+
+  private void showToastMessage(String msg){
+    Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+  }
   private void initializeOpenCVDependencies() {
 
     try {
@@ -143,21 +156,26 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
 
 
   private void askForPermissions(){
+    askPermissionWithCode(Manifest.permission.CAMERA);
+    askPermissionWithCode(Manifest.permission.READ_EXTERNAL_STORAGE);
+    askPermissionWithCode(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  }
+  private void askPermissionWithCode(String code){
     // Here, thisActivity is the current activity
     if (ContextCompat.checkSelfPermission(this,
-      Manifest.permission.CAMERA)
+      code)
       != PackageManager.PERMISSION_GRANTED) {
 
       // Permission is not granted
       // Should we show an explanation?
       if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-        Manifest.permission.CAMERA)) {
+        code)) {
         // Show an explanation to the user *asynchronously* -- don't block
         // this thread waiting for the user's response! After the user
         // sees the explanation, try again to request the permission.
       } else {
         // No explanation needed; request the permission
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},80);
+        ActivityCompat.requestPermissions(this,new String[]{code},80);
 
 
         // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -184,10 +202,16 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
   public void onResume()
   {
     super.onResume();
+    /*static {
+    OpenCVLoader.initDebug();
+
+  }*/
+
     if (!OpenCVLoader.initDebug()) {
       Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
       OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
     } else {
+      //System.loadLibrary("opencv_java");
       Log.d(TAG, "OpenCV library found inside package. Using it!");
       mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
     }
@@ -211,6 +235,7 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
   @Override
   public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
     mRgba = inputFrame.rgba();
+
     // Rotate mRgba 90 degrees
     Core.transpose(mRgba, mRgbaT);
     Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
@@ -230,10 +255,30 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
 
     // If there are any faces found, draw a rectangle around it
     Rect[] facesArray = faces.toArray();
+    //So the rectangle won't show in the saved Image but only in the camera
+    Mat duplicateMat=mRgba.clone();
     for (int i = 0; i <facesArray.length; i++) {
       Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
-      progressLoader.setProgress(50);
+
     }
+
+    if(facesArray.length==1){
+      try {
+        faceRegister.debounceImageSaveCall(duplicateMat, 100);
+        progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
+        if(faceRegister.getSavedImagesCount()>=10){
+          //faceRegister.trainModels();
+          finish();
+        }
+      }catch (IOException e){
+        Log.e(TAG,"IO Error: "+ e.getMessage());
+      }
+      catch (Exception e){
+        Log.e(TAG,"Exception: "+ e.getMessage());
+      }
+      //
+    }
+
 
     return mRgba;
   }
