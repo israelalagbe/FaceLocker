@@ -20,23 +20,23 @@ public class PinCode extends AppCompatActivity {
   private PatternLockViewListener patternLockViewListener = new PatternLockViewListener() {
     @Override
     public void onStarted() {
-      Log.v(getClass().getName(), "Pattern drawing started");
-      showToastMessage("Pattern drawing has started");
+      /*Log.v(getClass().getName(), "Pattern drawing started");
+      showToastMessage("Pattern drawing has started");*/
       continueButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onProgress(List<PatternLockView.Dot> progressPattern) {
-      Log.v(getClass().getName(), "Pattern progress: " +
+      /*Log.v(getClass().getName(), "Pattern progress: " +
         PatternLockUtils.patternToString(mPatternLockView, progressPattern));
       showToastMessage("Pattern progress: " +
-        PatternLockUtils.patternToString(mPatternLockView, progressPattern));
+        PatternLockUtils.patternToString(mPatternLockView, progressPattern));*/
     }
 
     @Override
     public void onComplete(List<PatternLockView.Dot> pattern) {
-      showToastMessage("Pattern complete: " +
-        PatternLockUtils.patternToString(mPatternLockView, pattern));
+//      showToastMessage("Pattern complete: " +
+//        PatternLockUtils.patternToString(mPatternLockView, pattern));
       Log.v(getClass().getName(), "Pattern complete: " +
         PatternLockUtils.patternToString(mPatternLockView, pattern));
 
@@ -47,7 +47,7 @@ public class PinCode extends AppCompatActivity {
     @Override
     public void onCleared() {
       Log.v(getClass().getName(), "Pattern has been cleared");
-      showToastMessage("pattern cleard");
+      //showToastMessage("pattern cleard");
 
       continueButton.setVisibility(View.INVISIBLE);
     }
