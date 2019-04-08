@@ -1,10 +1,13 @@
 package wavetech.facelocker;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -268,7 +271,37 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
         progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
         if(faceRegister.getSavedImagesCount()>=10){
           //faceRegister.trainModels();
-          finish();
+          //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
+          //finish();
+
+          this.runOnUiThread(new Runnable() {
+            public void run() {
+              AlertDialog alertDialog = new AlertDialog.Builder(CameraActivity.this).create();
+              alertDialog.setTitle("Success");
+              alertDialog.setMessage("Face registered successfully!");
+              alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int which) {
+                    Intent intent=new Intent(CameraActivity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    dialog.dismiss();
+
+                  }
+                });
+              alertDialog.show();
+              mOpenCvCameraView.disableView();
+
+              /*Intent intent=new Intent(CameraActivity.this,MainActivity.class);
+              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+              startActivity(intent);*/
+            }
+          });
+
+
+
+
+
         }
       }catch (IOException e){
         Log.e(TAG,"IO Error: "+ e.getMessage());
