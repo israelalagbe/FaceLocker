@@ -24,10 +24,14 @@ public class MainActivity extends AppCompatActivity {
       public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
         if(checked){
           askForPermissions();
+          startScreenLock();
           launchPinCodeActivity();
         }
       }
     });
+
+  }
+  private void startScreenLock(){
     startService(new Intent(this, LockscreenService.class));
   }
   private void launchPinCodeActivity(){

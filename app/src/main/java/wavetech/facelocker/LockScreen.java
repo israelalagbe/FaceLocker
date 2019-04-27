@@ -32,6 +32,20 @@ public class LockScreen extends AppCompatActivity
   // Set appropriate flags to make the screen appear over the keyguard
   @Override
   public void onAttachedToWindow() {
+    /*this.getWindow().setType(
+      WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+    this.getWindow().addFlags(
+      WindowManager.LayoutParams.FLAG_FULLSCREEN
+        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+    );*/
+
+    super.onAttachedToWindow();
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
     this.getWindow().setType(
       WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
     this.getWindow().addFlags(
@@ -40,16 +54,12 @@ public class LockScreen extends AppCompatActivity
         | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
     );
-
-    super.onAttachedToWindow();
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_lock_screen);
 
+    //Hide the action bar
+    getSupportActionBar().hide();
     init();
 
     // unlock screen in case of app get killed by system
