@@ -237,7 +237,7 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
 
     if(facesArray.length==1){
       try {
-        faceRegister.debounceImageSaveCall(duplicateMat, 100);
+        faceRegister.debounceImageSaveCall(duplicateMat, 50);
         progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
         if(faceRegister.getSavedImagesCount()>=10){
           //faceRegister.trainModels();
@@ -252,7 +252,7 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
               alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                    Intent intent=new Intent(CameraActivity.this,MainActivity.class);
+                    Intent intent=new Intent(CameraActivity.this,LockScreen.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     dialog.dismiss();
