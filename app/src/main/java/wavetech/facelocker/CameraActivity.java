@@ -162,6 +162,11 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
     askPermissionWithCode(Manifest.permission.CAMERA);
     askPermissionWithCode(Manifest.permission.READ_EXTERNAL_STORAGE);
     askPermissionWithCode(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    askPermissionWithCode(Manifest.permission.DISABLE_KEYGUARD);
+    askPermissionWithCode(Manifest.permission.WAKE_LOCK);
+    askPermissionWithCode(Manifest.permission.RECEIVE_BOOT_COMPLETED);
+    askPermissionWithCode(Manifest.permission.READ_PHONE_STATE);
+    askPermissionWithCode(Manifest.permission.SYSTEM_ALERT_WINDOW);
   }
   private void askPermissionWithCode(String code){
     // Here, thisActivity is the current activity
