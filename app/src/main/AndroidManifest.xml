@@ -3,22 +3,13 @@
   package="wavetech.facelocker">
 
   <uses-permission android:name="android.permission.CAMERA" />
-
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-  <uses-feature
-    android:name="android.hardware.camera"
-    />
-  <uses-feature
-    android:name="android.hardware.camera.autofocus"
-  />
-  <uses-feature
-    android:name="android.hardware.camera.front"
-    />
-  <uses-feature
-    android:name="android.hardware.camera.front.autofocus"
-   />
+  <uses-feature android:name="android.hardware.camera" />
+  <uses-feature android:name="android.hardware.camera.autofocus" />
+  <uses-feature android:name="android.hardware.camera.front" />
+  <uses-feature android:name="android.hardware.camera.front.autofocus" />
 
   <application
     android:allowBackup="true"
@@ -37,7 +28,8 @@
     <activity
       android:name=".PinCode"
       android:label="@string/pin_code_activity_name" />
-    <activity android:name=".CameraActivity"></activity>
+    <activity android:name=".CameraActivity" />
+    <activity android:name=".LockScreen"></activity>
   </application>
 
 </manifest>
