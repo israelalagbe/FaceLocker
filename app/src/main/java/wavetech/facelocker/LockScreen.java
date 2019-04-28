@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.Toast;
 
 import wavetech.facelocker.utils.LockscreenIntentReceiver;
 import wavetech.facelocker.utils.LockscreenService;
@@ -86,6 +87,7 @@ public class LockScreen extends AppCompatActivity
           PhoneStateListener.LISTEN_CALL_STATE);
 
       } catch (Exception e) {
+        Log.e(CameraActivity.TAG, e.getMessage());
       }
 
     }
@@ -99,7 +101,7 @@ public class LockScreen extends AppCompatActivity
       @Override
       public void onClick(View v) {
         // unlock home button and then screen on button press
-        unlockHomeButton();
+        unlockDevice();
       }
     });
   }
@@ -139,7 +141,7 @@ public class LockScreen extends AppCompatActivity
       return true;
     }
     if ((keyCode == KeyEvent.KEYCODE_HOME)) {
-
+      Toast.makeText(getApplicationContext(),"Home  button pressed",Toast.LENGTH_LONG).show();
       return true;
     }
 
