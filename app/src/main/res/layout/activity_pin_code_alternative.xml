@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/background"
-  tools:context=".PinCode">
+  tools:context=".PinCodeAlternative">
 
   <View
     android:id="@+id/opacityFilter"
@@ -64,7 +64,7 @@
         android:textSize="20sp" />
 
       <EditText
-        android:id="@+id/editText"
+        android:id="@+id/pinCodeInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -73,30 +73,10 @@
         android:layout_marginTop="130dp"
         android:layout_marginBottom="125dp"
         android:ems="10"
+        android:textAlignment="center"
+        android:focusedByDefault="true"
         android:importantForAutofill="no"
         android:inputType="numberPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-      <Button
-        android:id="@+id/continueBtn"
-        android:layout_width="77dp"
-        android:layout_height="37dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginEnd="263dp"
-        android:layout_marginRight="263dp"
-        android:layout_marginBottom="0dp"
-        android:background="@color/white"
-        android:elevation="10dp"
-        android:text="Continue"
-        android:textColor="@color/colorPrimary"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -110,6 +90,7 @@
         android:text="Continue"
         android:background="@color/colorPrimary"
         android:textColor="@color/white"
+        android:visibility="invisible"
         />
     </RelativeLayout>
 
