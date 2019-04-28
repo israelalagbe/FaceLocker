@@ -9,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import wavetech.facelocker.utils.LockscreenService;
+import wavetech.facelocker.utils.PasswordStore;
 
 public class MainActivity extends AppCompatActivity {
   Switch enableLockSwitch;
@@ -18,7 +20,10 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    final PasswordStore passwordStore=new PasswordStore(getApplicationContext());
     enableLockSwitch=findViewById(R.id.enableLockSwitch);
+    enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
+//    Toast.makeText(getApplicationContext(),"Pincode:"+passwordStore.getPinCode()+" Pattern code: "+passwordStore.getPatternCode(),Toast.LENGTH_LONG).show();
     enableLockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -26,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
           askForPermissions();
           startScreenLock();
           launchPinCodeActivity();
+        }
+        else{
+          passwordStore.reset();
         }
       }
     });

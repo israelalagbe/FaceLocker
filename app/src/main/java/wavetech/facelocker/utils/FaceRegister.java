@@ -46,7 +46,7 @@ public class FaceRegister{
     //System.loadLibrary("opencv_core");
 
   }
-  FaceRegister(){
+  public FaceRegister(){
 
     //faceRecognizer =   new FaceRecognizer();//com.googlecode.javacv.cpp.opencv_contrib.createLBPHFaceRecognizer(2,8,8,8,200);
   }
