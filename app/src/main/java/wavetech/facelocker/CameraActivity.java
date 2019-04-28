@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import wavetech.facelocker.utils.FaceRegister;
+import wavetech.facelocker.utils.PasswordStore;
 
 
 public class CameraActivity extends AppCompatActivity implements CvCameraViewListener2 {
@@ -234,6 +235,10 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
               alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
+                    PasswordStore passwordStore = new PasswordStore(getApplicationContext());
+                    passwordStore.setIsScreenLockEnabled(true);
+                    passwordStore.save();
+
                     Intent intent=new Intent(CameraActivity.this,LockScreen.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

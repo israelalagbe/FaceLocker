@@ -49,5 +49,11 @@ public class PasswordStore {
     editor.putString("pinCode", pinCode);
     editor.commit();
   }
+  public void reset(){
+    setPatternCode(null);
+    setPinCode(null);
+    setIsScreenLockEnabled(false);
+    save();
+  }
 
 }

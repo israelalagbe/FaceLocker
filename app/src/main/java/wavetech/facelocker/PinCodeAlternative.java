@@ -9,14 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import wavetech.facelocker.utils.PasswordStore;
+
 public class PinCodeAlternative extends AppCompatActivity {
   private EditText pinCodeInput;
   private Button btnContinue;
   String pinCodeText="";
+  private PasswordStore passwordStore;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_pin_code_alternative);
+    passwordStore= new PasswordStore(getApplicationContext());
     pinCodeInput = findViewById(R.id.pinCodeInput);
     btnContinue=findViewById(R.id.btnContinue);
     initializeListeners();
@@ -44,6 +48,8 @@ public class PinCodeAlternative extends AppCompatActivity {
     btnContinue.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
+        passwordStore.setPinCode(pinCodeText);
+        passwordStore.save();
         launchCameraActivity();
       }
     });
