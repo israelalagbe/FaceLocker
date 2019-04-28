@@ -1,24 +1,16 @@
 package wavetech.facelocker;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
 //OpenCV Java Classes
-import com.andrognito.patternlockview.PatternLockView;
-import com.andrognito.patternlockview.listener.PatternLockViewListener;
-import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.opencv.android.JavaCameraView;
@@ -36,24 +28,14 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.android.JavaCameraView;
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+
+import wavetech.facelocker.utils.FaceRegister;
 
 
 public class CameraActivity extends AppCompatActivity implements CvCameraViewListener2 {
@@ -64,7 +46,7 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
   private CameraBridgeViewBase mOpenCvCameraView;
 
 
-  private  FaceRegister faceRegister=new FaceRegister();
+  private FaceRegister faceRegister=new FaceRegister();
 
   // Used in Camera selection from menu (when implemented)
   private boolean              mIsJavaCamera = true;

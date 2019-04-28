@@ -1,4 +1,4 @@
-package wavetech.facelocker;
+package wavetech.facelocker.utils;
 
 
 import java.io.File;
@@ -32,6 +32,9 @@ import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
 import static org.opencv.imgcodecs.Imgcodecs.CV_IMWRITE_JPEG_QUALITY;
 import com.googlecode.javacv.cpp.opencv_contrib.FaceRecognizer;
+
+import wavetech.facelocker.CameraActivity;
+
 public class FaceRegister{
   private int savedImagesCount=0;
   private  static String TAG = CameraActivity.TAG;
