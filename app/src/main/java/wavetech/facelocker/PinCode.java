@@ -65,7 +65,7 @@ public class PinCode extends AppCompatActivity {
     continueButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        launchCameraActivity();
+        launchAlternativePincodeActivity();
       }
     });
 
@@ -73,8 +73,8 @@ public class PinCode extends AppCompatActivity {
 
     mPatternLockView.addPatternLockListener(patternLockViewListener);
   }
-  private void launchCameraActivity(){
-    Intent intent=new Intent(PinCode.this,CameraActivity.class);
+  private void launchAlternativePincodeActivity(){
+    Intent intent=new Intent(PinCode.this,PinCodeAlternative.class);
     startActivity(intent);
   }
 }
