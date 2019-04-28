@@ -39,19 +39,19 @@
       android:name=".LockScreen"
       android:excludeFromRecents="true"
       android:launchMode="singleTask"
-      android:screenOrientation="portrait"
+      android:screenOrientation="portrait" />
 
-      ></activity>
-    <service android:name=".utils.LockscreenService" >
-    </service>
+    <service android:name=".utils.LockscreenService"></service>
 
     <receiver
       android:name=".utils.LockscreenIntentReceiver"
-      android:enabled="true" >
+      android:enabled="true">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
       </intent-filter>
     </receiver>
+
+    <activity android:name=".PinCodeAlternative"></activity>
   </application>
 
 </manifest>
