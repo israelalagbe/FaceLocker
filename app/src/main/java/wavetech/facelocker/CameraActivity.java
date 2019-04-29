@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import wavetech.facelocker.utils.FaceRegister;
+import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.PasswordStore;
 
 
@@ -117,7 +118,9 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
     // And we are ready to go
     mOpenCvCameraView.enableView();
   }
-
+  private void startScreenLock(){
+    startService(new Intent(this, LockscreenService.class));
+  }
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -238,6 +241,8 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
                     PasswordStore passwordStore = new PasswordStore(getApplicationContext());
                     passwordStore.setIsScreenLockEnabled(true);
                     passwordStore.save();
+
+                    startScreenLock();
 
                     Intent intent=new Intent(CameraActivity.this,LockScreen.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

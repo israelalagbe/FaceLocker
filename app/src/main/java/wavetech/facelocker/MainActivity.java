@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
       public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
         if(checked){
           askForPermissions();
-          startScreenLock();
           launchPinCodeActivity();
         }
         else{
@@ -39,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
     });
 
   }
-  private void startScreenLock(){
-    startService(new Intent(this, LockscreenService.class));
-  }
+
   private void launchPinCodeActivity(){
     Intent intent=new Intent(MainActivity.this,PinCode.class);
     startActivity(intent);

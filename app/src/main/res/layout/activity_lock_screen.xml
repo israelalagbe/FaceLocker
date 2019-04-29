@@ -7,7 +7,151 @@
   android:background="@drawable/background"
   tools:context=".LockScreen">
 
-  <TextView
+  <RelativeLayout
+    android:id="@+id/pinCodeLayout"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+
+    >
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/cardView"
+      android:layout_width="wrap_content"
+      android:layout_height="176dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_marginStart="58dp"
+      android:layout_marginLeft="58dp"
+      android:layout_marginTop="151dp"
+      android:layout_marginEnd="60dp"
+      android:layout_marginRight="60dp"
+      android:elevation="5dp"
+      card_view:cardCornerRadius="4dp"
+      card_view:cardPreventCornerOverlap="false">
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+          android:id="@+id/pinCodeInput"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="51dp"
+          android:ems="10"
+          android:inputType="numberPassword"
+          android:textAlignment="center"
+          android:focusedByDefault="true"
+          android:imeOptions="actionDone"
+          android:textColor="#000000"
+          android:text=""
+          />
+      </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="197dp"
+      android:layout_marginLeft="197dp"
+      android:layout_marginBottom="45dp"
+      android:background="#00000000"
+      android:text="Use Pattern"
+      android:textColor="@color/white"
+      android:onClick="showPatternView"
+      />
+
+    <Button
+
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="72dp"
+      android:layout_marginLeft="72dp"
+      android:layout_marginBottom="45dp"
+      android:background="#00000000"
+      android:text="Use Camera"
+      android:textColor="@color/white"
+      android:onClick="showPinCodeView"
+
+      />
+  </RelativeLayout>
+
+  <RelativeLayout
+    android:id="@+id/patternLayout"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <com.andrognito.patternlockview.PatternLockView
+      android:id="@+id/pattern_lock_view"
+      android:layout_width="280dp"
+      android:layout_height="280dp"
+      android:layout_centerInParent="true"
+      app:correctStateColor="@color/colorPrimary"
+      app:normalStateColor="@color/white"
+
+      app:wrongStateColor="@color/colorPrimary" />
+
+    <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="197dp"
+      android:layout_marginLeft="197dp"
+      android:layout_marginBottom="45dp"
+      android:background="#00000000"
+      android:text="Use Pincode"
+      android:textColor="@color/white"
+      android:onClick="showPinCodeView"
+      />
+
+    <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="72dp"
+      android:layout_marginLeft="72dp"
+      android:layout_marginBottom="45dp"
+      android:background="#00000000"
+      android:text="Use Camera"
+      android:textColor="@color/white"
+
+      />
+
+
+  </RelativeLayout>
+
+
+  <!--<TextView
     android:id="@+id/textView3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -38,5 +182,5 @@
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.193" />
+    app:layout_constraintVertical_bias="0.193" />-->
 </android.support.constraint.ConstraintLayout>
