@@ -24,6 +24,7 @@ public class LockscreenService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
 	}
 
 	// Register for Lockscreen event intents

@@ -12,12 +12,22 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.andrognito.patternlockview.PatternLockView;
+import com.andrognito.patternlockview.listener.PatternLockViewListener;
+import com.andrognito.patternlockview.utils.PatternLockUtils;
+
+import java.util.List;
 
 import wavetech.facelocker.utils.LockscreenIntentReceiver;
 import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.LockscreenUtils;
+import wavetech.facelocker.utils.PasswordStore;
 
 public class LockScreen extends AppCompatActivity
   implements
@@ -29,6 +39,79 @@ public class LockScreen extends AppCompatActivity
 
   // Member variables
   private LockscreenUtils mLockscreenUtils;
+
+  private PatternLockViewListener patternLockViewListener;
+  private PatternLockView mPatternLockView;
+  private PasswordStore passwordStore;
+  private EditText pinCodeInput;
+
+  private void initializeListeners(){
+    patternLockViewListener=new PatternLockViewListener() {
+      @Override
+      public void onStarted() {
+      /*Log.v(getClass().getName(), "Pattern drawing started");
+      showToastMessage("Pattern drawing has started");*/
+
+      }
+
+      @Override
+      public void onProgress(List<PatternLockView.Dot> progressPattern) {
+      /*Log.v(getClass().getName(), "Pattern progress: " +
+        PatternLockUtils.patternToString(mPatternLockView, progressPattern));
+      showToastMessage("Pattern progress: " +
+        PatternLockUtils.patternToString(mPatternLockView, progressPattern));*/
+      }
+
+      @Override
+      public void onComplete(List<PatternLockView.Dot> pattern) {
+//      showToastMessage("Pattern complete: " +
+//        PatternLockUtils.patternToString(mPatternLockView, pattern));
+        //Log.v(getClass().getName(), "Pattern complete: " +
+          //PatternLockUtils.patternToString(mPatternLockView, pattern));
+        String patternInput=PatternLockUtils.patternToString(mPatternLockView, pattern);
+        if(passwordStore.getPatternCode().equals(patternInput))
+          unlockDevice();
+        else{
+          Toast.makeText(getApplicationContext(),"Invalid pattern!",Toast.LENGTH_SHORT).show();
+          mPatternLockView.clearPattern();
+        }
+      }
+
+      @Override
+      public void onCleared() {
+        Log.v(getClass().getName(), "Pattern has been cleared");
+        //showToastMessage("pattern cleard");
+      }
+    };
+    mPatternLockView.addPatternLockListener(patternLockViewListener);
+
+    pinCodeInput.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          String pinCode=passwordStore.getPinCode();
+          Toast.makeText(getApplicationContext(),"Saved: " + pinCode+" Current: "+pinCodeInput.getText().toString(),Toast.LENGTH_SHORT).show();
+          if(pinCode.equals(pinCodeInput.getText().toString()))
+            unlockDevice();
+          else{
+            Toast.makeText(getApplicationContext(),"Invalid pincode!",Toast.LENGTH_SHORT).show();
+            pinCodeInput.setText("");
+          }
+          return true;
+        }
+        return false;
+      }
+    });
+  }
+
+  public void showPatternView(View v){
+    findViewById(R.id.patternLayout).setVisibility(View.VISIBLE);
+    findViewById(R.id.pinCodeLayout).setVisibility(View.INVISIBLE);
+  }
+  public void showPinCodeView(View v){
+    findViewById(R.id.pinCodeLayout).setVisibility(View.VISIBLE);
+    findViewById(R.id.patternLayout).setVisibility(View.INVISIBLE);
+  }
 
   // Set appropriate flags to make the screen appear over the keyguard
   @Override
@@ -58,9 +141,12 @@ public class LockScreen extends AppCompatActivity
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_lock_screen);
-
+    passwordStore= new PasswordStore(getApplicationContext());
+    mPatternLockView=findViewById(R.id.pattern_lock_view);
+    pinCodeInput = findViewById(R.id.pinCodeInput);
     //Hide the action bar
     getSupportActionBar().hide();
+    initializeListeners();
     init();
 
     // unlock screen in case of app get killed by system
@@ -86,6 +172,8 @@ public class LockScreen extends AppCompatActivity
         telephonyManager.listen(phoneStateListener,
           PhoneStateListener.LISTEN_CALL_STATE);
 
+        initializeListeners();
+
       } catch (Exception e) {
         Log.e(CameraActivity.TAG, e.getMessage());
       }
@@ -95,15 +183,15 @@ public class LockScreen extends AppCompatActivity
 
   private void init() {
     mLockscreenUtils = new LockscreenUtils();
-    btnUnlock = (Button) findViewById(R.id.btnUnlock);
-    btnUnlock.setOnClickListener(new View.OnClickListener() {
-
-      @Override
-      public void onClick(View v) {
-        // unlock home button and then screen on button press
-        unlockDevice();
-      }
-    });
+//    btnUnlock = (Button) findViewById(R.id.btnUnlock);
+//    btnUnlock.setOnClickListener(new View.OnClickListener() {
+//
+//      @Override
+//      public void onClick(View v) {
+//        // unlock home button and then screen on button press
+//        unlockDevice();
+//      }
+//    });
   }
 
   // Handle events of calls and unlock screen if necessary
@@ -157,7 +245,7 @@ public class LockScreen extends AppCompatActivity
       return false;
     }
     if ((event.getKeyCode() == KeyEvent.KEYCODE_HOME)) {
-
+      Toast.makeText(getApplicationContext(),"Home  button pressed",Toast.LENGTH_LONG).show();
       return true;
     }
     return false;
