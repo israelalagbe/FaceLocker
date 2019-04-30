@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     final PasswordStore passwordStore=new PasswordStore(getApplicationContext());
     enableLockSwitch=findViewById(R.id.enableLockSwitch);
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
+    if(passwordStore.getIsScreenLockEnabled())
+      startScreenLock();
 //    Toast.makeText(getApplicationContext(),"Pincode:"+passwordStore.getPinCode()+" Pattern code: "+passwordStore.getPatternCode(),Toast.LENGTH_LONG).show();
     enableLockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
@@ -33,12 +35,18 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
           passwordStore.reset();
+          stopScreenLock();
         }
       }
     });
 
   }
-
+  private void stopScreenLock(){
+    stopService(new Intent(this, LockscreenService.class));
+  }
+  private void startScreenLock(){
+    startService(new Intent(this, LockscreenService.class));
+  }
   private void launchPinCodeActivity(){
     Intent intent=new Intent(MainActivity.this,PinCode.class);
     startActivity(intent);
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     askPermissionWithCode(Manifest.permission.RECEIVE_BOOT_COMPLETED);
     askPermissionWithCode(Manifest.permission.READ_PHONE_STATE);
     askPermissionWithCode(Manifest.permission.SYSTEM_ALERT_WINDOW);
+    askPermissionWithCode(Manifest.permission.REORDER_TASKS);
   }
   private void askPermissionWithCode(String code){
     // Here, thisActivity is the current activity
