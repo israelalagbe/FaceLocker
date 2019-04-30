@@ -16,6 +16,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -85,15 +86,15 @@ public class FaceRegister{
 
     }
   }
-  private void saveMatToImg(Mat mat) throws IOException {
+  private void saveMatToImg(Context context,Mat mat) throws IOException {
 
 
       // Resize image to 100x100
       Mat resizedImg = new Mat();
       Size size = new Size(200, 200);
       Imgproc.resize(mat, resizedImg, size);
-      File path = new File("/sdcard/opencv/capture");//Environment.getExternalStoragePublicDirectory(imgPath);
-      Log.v(TAG,"Path Exists: "+path.exists());
+      File path = context.getFilesDir();//Environment.getExternalStoragePublicDirectory(imgPath);
+      Log.v(TAG,"Path Exists: "+path.exists()+" Path: "+path.getAbsolutePath());
 
       if (savedImagesCount<10) savedImagesCount++;
 
@@ -141,7 +142,7 @@ public class FaceRegister{
   }
 
   private long lastDebounceTime;
-  public void debounceImageSaveCall(Mat mat,long delay) throws  IOException{
+  public void debounceImageSaveCall(Context context, Mat mat, long delay) throws  IOException{
     long lastClickTime = lastDebounceTime;
     long now = System.currentTimeMillis();
     lastDebounceTime = now;
@@ -150,7 +151,7 @@ public class FaceRegister{
     }
     else{
       Log.v(TAG,"Calling save");
-      saveMatToImg(mat);
+      saveMatToImg(context,mat);
     }
   }
 }
