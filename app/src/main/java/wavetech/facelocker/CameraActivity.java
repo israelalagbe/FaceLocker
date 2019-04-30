@@ -223,7 +223,7 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
 
     if(facesArray.length==1){
       try {
-        faceRegister.debounceImageSaveCall(duplicateMat, 50);
+        faceRegister.debounceImageSaveCall(this,duplicateMat, 50);
         progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
         if(faceRegister.getSavedImagesCount()>=10){
           //faceRegister.trainModels();

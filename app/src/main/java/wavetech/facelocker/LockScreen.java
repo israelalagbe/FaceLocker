@@ -109,11 +109,11 @@ public class LockScreen extends AppCompatActivity
 
   public void showPatternView(View v){
     findViewById(R.id.patternLayout).setVisibility(View.VISIBLE);
-    findViewById(R.id.pinCodeLayout).setVisibility(View.INVISIBLE);
+    findViewById(R.id.pinCodeLayout).setVisibility(View.GONE);
   }
   public void showPinCodeView(View v){
     findViewById(R.id.pinCodeLayout).setVisibility(View.VISIBLE);
-    findViewById(R.id.patternLayout).setVisibility(View.INVISIBLE);
+    findViewById(R.id.patternLayout).setVisibility(View.GONE);
   }
 
   // Set appropriate flags to make the screen appear over the keyguard

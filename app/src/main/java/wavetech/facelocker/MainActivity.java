@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
     if(passwordStore.getIsScreenLockEnabled())
       startScreenLock();
+
+    askForPermissions();
 //    Toast.makeText(getApplicationContext(),"Pincode:"+passwordStore.getPinCode()+" Pattern code: "+passwordStore.getPatternCode(),Toast.LENGTH_LONG).show();
     enableLockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
