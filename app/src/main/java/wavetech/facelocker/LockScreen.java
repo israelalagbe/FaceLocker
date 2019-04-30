@@ -1,5 +1,7 @@
 package wavetech.facelocker;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -86,15 +88,16 @@ public class LockScreen extends AppCompatActivity
     mPatternLockView.addPatternLockListener(patternLockViewListener);
 
     pinCodeInput.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
           String pinCode=passwordStore.getPinCode();
-          Toast.makeText(getApplicationContext(),"Saved: " + pinCode+" Current: "+pinCodeInput.getText().toString(),Toast.LENGTH_SHORT).show();
+          //Toast.makeText(getApplicationContext(),"Saved: " + pinCode+" Current: "+pinCodeInput.getText().toString(),Toast.LENGTH_SHORT).show();
           if(pinCode.equals(pinCodeInput.getText().toString()))
             unlockDevice();
           else{
-            Toast.makeText(getApplicationContext(),"Invalid pincode!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Incorrect Password!",Toast.LENGTH_SHORT).show();
             pinCodeInput.setText("");
           }
           return true;
@@ -126,8 +129,8 @@ public class LockScreen extends AppCompatActivity
     );*/
 
     super.onAttachedToWindow();
+    //this.getWindow().setType(LayoutParams.TYPE_KEYGUARD_DIALOG);
   }
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     this.getWindow().setType(
@@ -143,7 +146,7 @@ public class LockScreen extends AppCompatActivity
     setContentView(R.layout.activity_lock_screen);
     passwordStore= new PasswordStore(getApplicationContext());
     mPatternLockView=findViewById(R.id.pattern_lock_view);
-    pinCodeInput = findViewById(R.id.pinCodeInput);
+    pinCodeInput = findViewById(R.id.passwordEditText);
     //Hide the action bar
     getSupportActionBar().hide();
     initializeListeners();
@@ -179,6 +182,17 @@ public class LockScreen extends AppCompatActivity
       }
 
     }
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    //The following are used to disable minimize button
+    ActivityManager activityManager = (ActivityManager) getApplicationContext()
+      .getSystemService(Context.ACTIVITY_SERVICE);
+
+    activityManager.moveTaskToFront(getTaskId(), 0);
   }
 
   private void init() {
@@ -221,7 +235,6 @@ public class LockScreen extends AppCompatActivity
   // Handle button clicks
   @Override
   public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
-
     if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
       || (keyCode == KeyEvent.KEYCODE_POWER)
       || (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
@@ -246,7 +259,13 @@ public class LockScreen extends AppCompatActivity
     }
     if ((event.getKeyCode() == KeyEvent.KEYCODE_HOME)) {
       Toast.makeText(getApplicationContext(),"Home  button pressed",Toast.LENGTH_LONG).show();
-      return true;
+      return false;
+    }
+
+    //Let the number keys work for the password text input
+    if(event.getKeyCode() >= KeyEvent.KEYCODE_1 && event.getKeyCode() <= KeyEvent.KEYCODE_9)
+    {
+      return super.dispatchKeyEvent(event);
     }
     return false;
   }
