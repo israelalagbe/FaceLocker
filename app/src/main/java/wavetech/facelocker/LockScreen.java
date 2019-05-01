@@ -2,6 +2,8 @@ package wavetech.facelocker;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -24,6 +26,16 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
+import java.io.IOException;
 import java.util.List;
 
 import wavetech.facelocker.utils.LockscreenIntentReceiver;
@@ -31,7 +43,7 @@ import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.LockscreenUtils;
 import wavetech.facelocker.utils.PasswordStore;
 
-public class LockScreen extends AppCompatActivity
+public class LockScreen extends AbstractCameraActivity
   implements
   LockscreenUtils.OnLockStatusChangedListener
 {
@@ -46,6 +58,95 @@ public class LockScreen extends AppCompatActivity
   private PatternLockView mPatternLockView;
   private PasswordStore passwordStore;
   private EditText pinCodeInput;
+
+
+  //All camera stuffs goes here
+  /**
+   * Now, this one is interesting! OpenCV orients the camera
+   * to left by 90 degrees. So if the app is in portrait more,
+   * camera will be in -90 or 270 degrees orientation. We fix that in the n
+   * ext and the most important function. There you go!
+   * @param inputFrame
+   * @return
+   */
+  @Override
+  public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+    mRgba = inputFrame.rgba();
+
+    // Rotate mRgba 90 degrees
+    Core.transpose(mRgba, mRgbaT);
+    Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
+    //Flip by 180 degrees
+    Core.flip(mRgbaF, mRgba, -1 );
+
+    // Create a grayscale image
+    Imgproc.cvtColor(mRgba, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
+
+    MatOfRect faces = new MatOfRect();
+
+    // Use the classifier to detect faces
+    if (cascadeClassifier != null) {
+      cascadeClassifier.detectMultiScale(grayscaleImage, faces, 1.1, 2, 2,
+        new Size(absoluteFaceSize, absoluteFaceSize), new Size());
+    }
+
+    // If there are any faces found, draw a rectangle around it
+    Rect[] facesArray = faces.toArray();
+    //So the rectangle won't show in the saved Image but only in the camera
+    Mat duplicateMat=mRgba.clone();
+    for (int i = 0; i <facesArray.length; i++) {
+      Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+
+    }
+
+    if(facesArray.length==1){
+      try {
+        faceRegister.debounceImageSaveCall(this,duplicateMat, 50);
+        progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
+        if(faceRegister.getSavedImagesCount()>=10){
+          //faceRegister.trainModels();
+          //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
+          //finish();
+
+          this.runOnUiThread(new Runnable() {
+            public void run() {
+//              try{
+//
+//              }
+//              catch (IOException e){
+//                e.printStackTrace();
+//                Log.e(TAG,"IO Exception: "+ e.getMessage());
+//              }
+//              catch (Exception e){
+//                e.printStackTrace();
+//                Log.e(TAG,"IO Exception: "+ e.getMessage());
+//              }
+
+
+              mOpenCvCameraView.disableView();
+            }
+          });
+
+
+
+
+
+        }
+      }catch (IOException e){
+        Log.e(TAG,"IO Error: "+ e.getMessage());
+      }
+      catch (Exception e){
+        Log.e(TAG,"Exception: "+ e.getMessage());
+      }
+      //
+    }
+
+
+    return mRgba;
+  }
+
+
+
 
   private void initializeListeners(){
     patternLockViewListener=new PatternLockViewListener() {
@@ -185,7 +286,7 @@ public class LockScreen extends AppCompatActivity
   }
 
   @Override
-  protected void onPause() {
+  public void onPause() {
     super.onPause();
 
     //The following are used to disable minimize button
