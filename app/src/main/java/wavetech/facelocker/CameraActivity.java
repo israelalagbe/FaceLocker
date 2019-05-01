@@ -13,6 +13,7 @@ import android.widget.Toast;
 //OpenCV Java Classes
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import org.bytedeco.javacv.FrameFilter;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -67,10 +68,15 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
   //Initialize the loader
   private KProgressHUD progressLoader;
 
+//  static  {
+//    System.loadLibrary("opencv_java3");
+//  }
+
   //Now, lets call OpenCV manager to help our app communicate with android phone to make OpenCV work
   private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
     @Override
     public void onManagerConnected(int status) {
+
       switch (status) {
         case LoaderCallbackInterface.SUCCESS:
         {
@@ -232,6 +238,19 @@ public class CameraActivity extends AppCompatActivity implements CvCameraViewLis
 
           this.runOnUiThread(new Runnable() {
             public void run() {
+              try{
+                faceRegister.trainModels(CameraActivity.this.getApplicationContext());
+                Log.v(TAG,"Finish training models");
+              }
+              catch (IOException e){
+                e.printStackTrace();
+                Log.e(TAG,"IO Exception: "+ e.getMessage());
+              }
+              catch (Exception e){
+                e.printStackTrace();
+                Log.e(TAG,"IO Exception: "+ e.getMessage());
+              }
+
               AlertDialog alertDialog = new AlertDialog.Builder(CameraActivity.this).create();
               alertDialog.setTitle("Success");
               alertDialog.setMessage("Face registered successfully!");

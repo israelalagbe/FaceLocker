@@ -37,6 +37,8 @@ dependencies {
     implementation project(':openCVLibrary343')
     implementation files('libs/javacv.jar')
     implementation files('libs/javacpp.jar')
+    implementation files('libs/ffmpeg.jar')
+    implementation files('libs/opencv.jar')
     implementation 'com.eftimoff:android-patternview:1.0.6@aar'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
 }
