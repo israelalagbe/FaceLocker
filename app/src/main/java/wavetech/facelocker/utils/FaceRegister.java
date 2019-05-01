@@ -93,7 +93,7 @@ public class FaceRegister{
     };
     File path = context.getFilesDir();
     File[] capturedImages=path.listFiles(fileNameFilter);
-    opencv_core.Mat labels = new opencv_core.Mat(capturedImages.length, 1, CV_32SC1);
+    opencv_core.Mat labels = new opencv_core.Mat(capturedImages.length, 1, opencv_core.CV_32SC1);
     //int[] labels = new int[capturedImages.length];
     MatVector images = new MatVector(capturedImages.length);
     IntBuffer labelsBuf = labels.createBuffer();
@@ -112,7 +112,7 @@ public class FaceRegister{
 //      opencv_core.IplImage grayImg = opencv_core.IplImage.create(img.width(), img.height(), IPL_DEPTH_8U, 1);
 //      cvCvtColor(img, grayImg, CV_BGR2GRAY);
 //      images.put
-      labelsBuf.put(i, defaultFaceLabel);
+      labelsBuf.put(i, defaultFaceLabel+i);
       images.put(i, img);
       //Label corresponding to the id of t
       // he image to be used for recognizing which image it is,
@@ -126,9 +126,9 @@ public class FaceRegister{
     faceRecognizer.train(images,labels);
     File targetFile=new File(path, "train.xml");
     faceRecognizer.save(targetFile.getAbsolutePath());
-    Log.v(TAG,"Saved: "+targetFile.exists());
-    opencv_core.Mat testImage=imread(capturedImages[0].getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
-    this.predict(context,testImage);
+    Log.v(TAG,"Saved: "+targetFile.exists()+" image path: " + capturedImages[0].getAbsolutePath());
+    //opencv_core.Mat testImage=imread(capturedImages[0].getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
+    //this.predict(context,testImage);
   }
   private void saveMatToImg(Context context,Mat mat) throws IOException {
 
@@ -155,30 +155,6 @@ public class FaceRegister{
       boolean saved=Imgcodecs.imwrite(filename,resizedImg,param);
       if(!saved)
         throw  new IOException("Failed to save image: "+filename+" to external storage!");
-
-//      Utils.matToBitmap(resizedImg,bitmap);
-//      try {
-//        FileOutputStream savedImageStream = new FileOutputStream(filename,false);
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, savedImageStream);
-//        savedImageStream.close();
-//      }
-//      catch (Exception e) {
-//        Log.e(TAG,e.getCause()+" "+e.getMessage());
-//        e.printStackTrace();
-//      }
-
-      /*bool = Highgui.imwrite(filename, resizedImg);
-
-      if (bool == true)
-        Log.i(TAG, "SUCCESS writing image to external storage");
-      else
-        Log.i(TAG, "Failure writing image to external storage");*/
-
-      /*Intent mediaScanIntent = new Intent(
-        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-      Uri contentUri = Uri.fromFile(file);
-      mediaScanIntent.setData(contentUri);
-      this.sendBroadcast(mediaScanIntent);*/
     }
 
   public int getSavedImagesCount() {
