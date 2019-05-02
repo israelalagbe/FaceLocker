@@ -13,6 +13,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -27,6 +28,7 @@ import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
 import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -58,7 +60,7 @@ public class LockScreen extends AbstractCameraActivity
   private PatternLockView mPatternLockView;
   private PasswordStore passwordStore;
   private EditText pinCodeInput;
-
+  boolean isPredicting=false;
 
   //All camera stuffs goes here
   /**
@@ -99,44 +101,30 @@ public class LockScreen extends AbstractCameraActivity
 
     }
 
-    if(facesArray.length==1){
+    if(facesArray.length==1 && !isPredicting){
       try {
-        faceRegister.debounceImageSaveCall(this,duplicateMat, 50);
-        progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
-        if(faceRegister.getSavedImagesCount()>=10){
-          //faceRegister.trainModels();
-          //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
-          //finish();
-
+        isPredicting=true;
+        Mat faceMat = new Mat(duplicateMat,facesArray[0]);
+        boolean recognizedFace=faceRegister.predict(this,faceMat);
+        faceMat.release();
+        if(recognizedFace) {
           this.runOnUiThread(new Runnable() {
             public void run() {
-//              try{
-//
-//              }
-//              catch (IOException e){
-//                e.printStackTrace();
-//                Log.e(TAG,"IO Exception: "+ e.getMessage());
-//              }
-//              catch (Exception e){
-//                e.printStackTrace();
-//                Log.e(TAG,"IO Exception: "+ e.getMessage());
-//              }
-
-
-              mOpenCvCameraView.disableView();
+              isPredicting = true;
+              unlockDevice();
             }
           });
-
-
-
-
-
         }
+
       }catch (IOException e){
         Log.e(TAG,"IO Error: "+ e.getMessage());
       }
       catch (Exception e){
         Log.e(TAG,"Exception: "+ e.getMessage());
+      }
+      finally {
+        isPredicting=false;
+        duplicateMat.release();
       }
       //
     }
@@ -211,10 +199,23 @@ public class LockScreen extends AbstractCameraActivity
   public void showPatternView(View v){
     findViewById(R.id.patternLayout).setVisibility(View.VISIBLE);
     findViewById(R.id.pinCodeLayout).setVisibility(View.GONE);
+    findViewById(R.id.cameraLayout).setVisibility(View.GONE);
   }
   public void showPinCodeView(View v){
     findViewById(R.id.pinCodeLayout).setVisibility(View.VISIBLE);
     findViewById(R.id.patternLayout).setVisibility(View.GONE);
+
+    findViewById(R.id.cameraLayout).setVisibility(View.GONE);
+    //mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+    //mOpenCvCameraView.setCvCameraViewListener(null);
+  }
+  public void showCameraView(View v){
+    findViewById(R.id.pinCodeLayout).setVisibility(View.GONE);
+    findViewById(R.id.patternLayout).setVisibility(View.GONE);
+
+    findViewById(R.id.cameraLayout).setVisibility(View.VISIBLE);
+    mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+    mOpenCvCameraView.setCvCameraViewListener(this);
   }
 
   // Set appropriate flags to make the screen appear over the keyguard
@@ -248,6 +249,12 @@ public class LockScreen extends AbstractCameraActivity
     passwordStore= new PasswordStore(getApplicationContext());
     mPatternLockView=findViewById(R.id.pattern_lock_view);
     pinCodeInput = findViewById(R.id.passwordEditText);
+
+    //OpenCV initializations
+    mOpenCvCameraView = (JavaCameraView) findViewById(R.id.camera_view);
+    mOpenCvCameraView.setCameraIndex(1);
+    mOpenCvCameraView.setVisibility(SurfaceView.GONE);
+
     //Hide the action bar
     getSupportActionBar().hide();
     initializeListeners();
