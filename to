@@ -1,0 +1,273 @@
+[33mcommit eee9c7509dc038a14afc2beb199c5457b9a1633a[m[33m ([m[1;36mHEAD -> [m[1;32mnew-libraries[m[33m, [m[1;31morigin/new-libraries[m[33m)[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Thu May 2 08:14:18 2019 +0100
+
+    Working but with crashes
+
+ .idea/misc.xml                                     |  2 [32m+[m[31m-[m
+ .../java/wavetech/facelocker/CameraActivity.java   | 14 [32m++++[m[31m-[m
+ .../main/java/wavetech/facelocker/LockScreen.java  | 63 [32m+++++++++++[m[31m---------[m
+ .../wavetech/facelocker/utils/FaceRegister.java    | 67 [32m+++++++++++++++++++[m[31m---[m
+ app/src/main/res/layout/activity_lock_screen.xml   | 55 [32m++++++++++++++++[m[31m--[m
+ 5 files changed, 155 insertions(+), 46 deletions(-)
+
+[33mcommit aee6abedec6e105886054a785a0c488c433a9afe[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Wed May 1 16:10:17 2019 +0100
+
+    Refractoring and ui fixes
+
+ .idea/misc.xml                                     |   2 [32m+[m[31m-[m
+ .../facelocker/AbstractCameraActivity.java         | 165 [32m+++++++++++++++++++++[m
+ .../java/wavetech/facelocker/CameraActivity.java   | 134 [32m+[m[31m----------------[m
+ .../main/java/wavetech/facelocker/LockScreen.java  | 105 [32m++++++++++++[m[31m-[m
+ .../wavetech/facelocker/utils/FaceRegister.java    |  34 [32m+[m[31m----[m
+ app/src/main/res/layout/activity_lock_screen.xml   | 119 [32m++++++++[m[31m-------[m
+ 6 files changed, 341 insertions(+), 218 deletions(-)
+
+[33mcommit b5505aeb69cdb46d7184e4053bde39dda4ee9927[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Wed May 1 09:36:45 2019 +0100
+
+    Fixed face recognizer dll and wrote a predict method
+
+ .idea/misc.xml                                     |   2 [32m+[m[31m-[m
+ app/build.gradle                                   |   2 [32m+[m
+ app/libs/ffmpeg.jar                                | Bin [31m0[m -> [32m247693[m bytes
+ app/libs/javacpp.jar                               | Bin [31m119676[m -> [32m360296[m bytes
+ app/libs/javacv.jar                                | Bin [31m1093839[m -> [32m401878[m bytes
+ app/libs/opencv.jar                                | Bin [31m0[m -> [32m1505648[m bytes
+ .../java/wavetech/facelocker/CameraActivity.java   |  19 [32m+++++[m
+ .../wavetech/facelocker/utils/FaceRegister.java    |  88 [32m+++++++++++++++[m[31m------[m
+ app/src/main/jniLibs/armeabi/libjnicvkernels.so    | Bin [31m0[m -> [32m99728[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_aruco.so | Bin [31m0[m -> [32m1050196[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_bgsegm.so    | Bin [31m0[m -> [32m390740[m bytes
+ .../jniLibs/armeabi/libjniopencv_bioinspired.so    | Bin [31m0[m -> [32m124304[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_calib3d.so   | Bin [31m0[m -> [32m1214036[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_core.so  | Bin [31m652536[m -> [32m3577428[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_dnn.so   | Bin [31m0[m -> [32m689748[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_face.so  | Bin [31m0[m -> [32m566868[m bytes
+ .../jniLibs/armeabi/libjniopencv_features2d.so     | Bin [31m0[m -> [32m665172[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_flann.so | Bin [31m0[m -> [32m153168[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_highgui.so   | Bin [31m0[m -> [32m288200[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_img_hash.so  | Bin [31m0[m -> [32m120400[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_imgcodecs.so | Bin [31m0[m -> [32m206416[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_imgproc.so   | Bin [31m0[m -> [32m1320528[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_java.so  | Bin [31m0[m -> [32m321108[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_ml.so    | Bin [31m0[m -> [32m665172[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_objdetect.so | Bin [31m0[m -> [32m484944[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_optflow.so   | Bin [31m0[m -> [32m378452[m bytes
+ .../armeabi/libjniopencv_phase_unwrapping.so       | Bin [31m0[m -> [32m62864[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_photo.so | Bin [31m0[m -> [32m366160[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_plot.so  | Bin [31m0[m -> [32m66960[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_saliency.so  | Bin [31m0[m -> [32m366164[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_shape.so | Bin [31m0[m -> [32m116168[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_stitching.so | Bin [31m0[m -> [32m1140308[m bytes
+ .../armeabi/libjniopencv_structured_light.so       | Bin [31m0[m -> [32m419412[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_superres.so  | Bin [31m0[m -> [32m112072[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_text.so  | Bin [31m0[m -> [32m988756[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_tracking.so  | Bin [31m0[m -> [32m771668[m bytes
+ app/src/main/jniLibs/armeabi/libjniopencv_video.so | Bin [31m0[m -> [32m279952[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_videoio.so   | Bin [31m0[m -> [32m103824[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_videostab.so | Bin [31m0[m -> [32m607828[m bytes
+ .../jniLibs/armeabi/libjniopencv_xfeatures2d.so    | Bin [31m0[m -> [32m501332[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_ximgproc.so  | Bin [31m0[m -> [32m595540[m bytes
+ .../main/jniLibs/armeabi/libjniopencv_xphoto.so    | Bin [31m0[m -> [32m83344[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_aruco.so    | Bin [31m0[m -> [32m447944[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_bgsegm.so   | Bin [31m0[m -> [32m226896[m bytes
+ .../main/jniLibs/armeabi/libopencv_bioinspired.so  | Bin [31m0[m -> [32m296548[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_calib3d.so  | Bin [31m873784[m -> [32m1009260[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_contrib.so  | Bin [31m1082760[m -> [32m0[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_core.so     | Bin [31m2448284[m -> [32m2219216[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_dnn.so      | Bin [31m0[m -> [32m2561516[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_face.so     | Bin [31m0[m -> [32m579152[m bytes
+ .../main/jniLibs/armeabi/libopencv_features2d.so   | Bin [31m922936[m -> [32m620192[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_flann.so    | Bin [31m697660[m -> [32m353876[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_gpu.so      | Bin [31m574776[m -> [32m0[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_highgui.so  | Bin [31m2425640[m -> [32m30100[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_img_hash.so | Bin [31m0[m -> [32m190032[m bytes
+ .../main/jniLibs/armeabi/libopencv_imgcodecs.so    | Bin [31m0[m -> [32m2185452[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_imgproc.so  | Bin [31m2164156[m -> [32m2412380[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_info.so     | Bin [31m13332[m -> [32m0[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_java.so     | Bin [31m0[m -> [32m1164880[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_legacy.so   | Bin [31m1252160[m -> [32m0[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_ml.so       | Bin [31m822736[m -> [32m587344[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_nonfree.so  | Bin [31m423224[m -> [32m0[m bytes
+ .../main/jniLibs/armeabi/libopencv_objdetect.so    | Bin [31m439940[m -> [32m439932[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_optflow.so  | Bin [31m0[m -> [32m398992[m bytes
+ .../jniLibs/armeabi/libopencv_phase_unwrapping.so  | Bin [31m0[m -> [32m30160[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_photo.so    | Bin [31m128128[m -> [32m652900[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_plot.so     | Bin [31m0[m -> [32m165456[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_saliency.so | Bin [31m0[m -> [32m259676[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_shape.so    | Bin [31m0[m -> [32m276048[m bytes
+ .../main/jniLibs/armeabi/libopencv_stitching.so    | Bin [31m656700[m -> [32m509564[m bytes
+ .../jniLibs/armeabi/libopencv_structured_light.so  | Bin [31m0[m -> [32m79312[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_superres.so | Bin [31m0[m -> [32m108064[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_text.so     | Bin [31m0[m -> [32m411216[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_tracking.so | Bin [31m0[m -> [32m2074804[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_video.so    | Bin [31m304312[m -> [32m419508[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_videoio.so  | Bin [31m0[m -> [32m247376[m bytes
+ .../main/jniLibs/armeabi/libopencv_videostab.so    | Bin [31m521528[m -> [32m353872[m bytes
+ .../main/jniLibs/armeabi/libopencv_xfeatures2d.so  | Bin [31m0[m -> [32m2745956[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_ximgproc.so | Bin [31m0[m -> [32m935524[m bytes
+ app/src/main/jniLibs/armeabi/libopencv_xphoto.so   | Bin [31m0[m -> [32m441648[m bytes
+ app/src/main/jniLibs/armeabi/libtbb.so             | Bin [31m234712[m -> [32m0[m bytes
+ 81 files changed, 88 insertions(+), 23 deletions(-)
+
+[33mcommit 54359b23ba3384e0f85cf7c93b4f32d5c4707e31[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Tue Apr 30 09:58:05 2019 +0100
+
+    Fixed ui issues
+
+ .../java/wavetech/facelocker/CameraActivity.java   |   2 [32m+[m[31m-[m
+ .../main/java/wavetech/facelocker/LockScreen.java  |   4 [32m+[m[31m-[m
+ .../java/wavetech/facelocker/MainActivity.java     |   2 [32m+[m
+ .../wavetech/facelocker/utils/FaceRegister.java    |  11 [32m++[m[31m-[m
+ app/src/main/res/layout/activity_lock_screen.xml   | 103 [32m++++++++++++++[m[31m-------[m
+ app/src/main/res/layout/activity_main.xml          |  12 [32m+[m[31m--[m
+ app/src/main/res/layout/activity_pin_code.xml      |  14 [32m+[m[31m--[m
+ .../res/layout/activity_pin_code_alternative.xml   |   9 [32m+[m[31m-[m
+ 8 files changed, 98 insertions(+), 59 deletions(-)
+
+[33mcommit dce79eda298c01d0da73d99c6018e042d3893ac8[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Tue Apr 30 07:11:20 2019 +0100
+
+    Got the pin code lock screen, disabled minimize button and did some little fixes too
+
+ app/src/main/AndroidManifest.xml                   | 11 [32m+++++[m[31m-[m
+ .../main/java/wavetech/facelocker/LockScreen.java  | 31 [32m++++++++++++[m[31m---[m
+ .../java/wavetech/facelocker/MainActivity.java     | 11 [32m+++++[m[31m-[m
+ app/src/main/res/layout/activity_lock_screen.xml   | 44 [32m++++++++++++++[m[31m--------[m
+ 4 files changed, 72 insertions(+), 25 deletions(-)
+
+[33mcommit e24d6c9dabb7cd5ca76538b62d4d01de2d1d7ca3[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Mon Apr 29 20:29:26 2019 +0100
+
+    Added more screens to lock view and did a little refractor
+
+ .../java/wavetech/facelocker/CameraActivity.java   |   7 [32m+[m[31m-[m
+ .../main/java/wavetech/facelocker/LockScreen.java  | 110 [32m+++++++++++++[m[31m--[m
+ .../java/wavetech/facelocker/MainActivity.java     |   5 [32m+[m[31m-[m
+ .../facelocker/utils/LockscreenService.java        |   1 [32m+[m
+ app/src/main/res/layout/activity_lock_screen.xml   | 148 [32m++++++++++++++++++++[m[31m-[m
+ app/src/main/res/layout/activity_pin_code.xml      |   8 [32m++[m
+ 6 files changed, 261 insertions(+), 18 deletions(-)
+
+[33mcommit 328e8458116ef9a6aff1630fbe1d04628110ce4f[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sun Apr 28 15:59:25 2019 +0100
+
+    password store working with storing app state
+
+ .../java/wavetech/facelocker/CameraActivity.java   |  5 [32m++[m
+ .../java/wavetech/facelocker/MainActivity.java     |  8 [32m++[m
+ app/src/main/java/wavetech/facelocker/PinCode.java | 90 [32m++++++++++++[m[31m----------[m
+ .../wavetech/facelocker/PinCodeAlternative.java    |  6 [32m++[m
+ .../wavetech/facelocker/utils/FaceRegister.java    |  2 [32m+[m[31m-[m
+ .../wavetech/facelocker/utils/PasswordStore.java   |  6 [32m++[m
+ 6 files changed, 75 insertions(+), 42 deletions(-)
+
+[33mcommit e4bebf0f9d1fbb94fe3ff898c7a766ac58a11264[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sun Apr 28 15:38:17 2019 +0100
+
+    Added face register to util folder
+
+ .../java/wavetech/facelocker/CameraActivity.java   | 24 [32m+++[m[31m-------------------[m
+ .../facelocker/{ => utils}/FaceRegister.java       |  5 [32m++++[m[31m-[m
+ 2 files changed, 7 insertions(+), 22 deletions(-)
+
+[33mcommit 90b4b87917764c2934fb168dd676129dbe8fc696[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sun Apr 28 15:36:51 2019 +0100
+
+    Added a new class for storing app state and password
+
+ .../wavetech/facelocker/utils/PasswordStore.java   | 53 [32m++++++++++++++++++++++[m
+ app/src/main/res/layout/activity_lock_screen.xml   |  1 [32m+[m
+ 2 files changed, 54 insertions(+)
+
+[33mcommit 2bf87547790892c5d2ac96f7cf69e30a3d0176c0[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sun Apr 28 15:16:43 2019 +0100
+
+    Linked the new alternative pincode view
+
+ app/src/main/java/wavetech/facelocker/PinCode.java |  6 [32m+[m[31m--[m
+ .../wavetech/facelocker/PinCodeAlternative.java    | 44 [32m+++++++++++++++++++++[m[31m-[m
+ .../res/layout/activity_pin_code_alternative.xml   | 29 [32m+++[m[31m-----------[m
+ 3 files changed, 51 insertions(+), 28 deletions(-)
+
+[33mcommit 24d5a6bb4adf4dba3a810e40dd138be339bc741e[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sun Apr 28 14:46:34 2019 +0100
+
+    Added another pincode activity
+
+ app/src/main/AndroidManifest.xml                   |  10 [32m+[m[31m-[m
+ .../main/java/wavetech/facelocker/LockScreen.java  |   6 [32m+[m[31m-[m
+ .../wavetech/facelocker/PinCodeAlternative.java    |  13 [32m+++[m
+ .../res/layout/activity_pin_code_alternative.xml   | 119 [32m+++++++++++++++++++++[m
+ 4 files changed, 141 insertions(+), 7 deletions(-)
+
+[33mcommit 6e2773d31d717ddbfd7e9887066393c7971d11f5[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sat Apr 27 14:41:31 2019 +0100
+
+    Made some little changes and fixed LockScreen activity crash
+
+ app/src/main/java/wavetech/facelocker/CameraActivity.java |  4 [32m++[m[31m--[m
+ app/src/main/java/wavetech/facelocker/LockScreen.java     | 14 [32m++++++++++++[m[31m--[m
+ app/src/main/java/wavetech/facelocker/MainActivity.java   |  4 [32m++++[m
+ 3 files changed, 18 insertions(+), 4 deletions(-)
+
+[33mcommit 1bf8fe200da66f225915e6b4aed71860ca40a580[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sat Apr 27 14:13:13 2019 +0100
+
+    Moved the dynaic permissions
+
+ .../java/wavetech/facelocker/CameraActivity.java   | 37 [32m+[m[31m------------------[m
+ .../java/wavetech/facelocker/MainActivity.java     | 42 [32m++++++++++++++++++++++[m
+ 2 files changed, 43 insertions(+), 36 deletions(-)
+
+[33mcommit 04e44e142ec8568b468b23966e1f55d677d800ae[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sat Apr 27 13:44:23 2019 +0100
+
+    Added dynamic permissions
+
+ app/src/main/java/wavetech/facelocker/CameraActivity.java | 5 [32m+++++[m
+ 1 file changed, 5 insertions(+)
+
+[33mcommit 87241f4267734e56eaf7e7974e5ca16c02e8b63f[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sat Apr 27 13:40:58 2019 +0100
+
+    Added lock code to lock screen activity
+
+ .../main/java/wavetech/facelocker/LockScreen.java  | 188 [32m++++++++++++++++++++[m[31m-[m
+ app/src/main/res/layout/activity_lock_screen.xml   |  22 [32m+++[m
+ 2 files changed, 208 insertions(+), 2 deletions(-)
+
+[33mcommit 4cac7d9a2e78b0ba223750741be3792f1eb72bd3[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sat Apr 27 13:32:23 2019 +0100
+
+    Modified androidmanifest for lockscreen
+
+ app/src/main/AndroidManifest.xml | 10 [32m++++++++++[m
+ 1 file changed, 10 insertions(+)
+
+[33mcommit 58c15b848bf230b99610dde10b3720ac88531453[m
+Author: israelalagbe <israelalagbe53@gmail.com>
+Date:   Sat Apr 27 13:31:16 2019 +0100
+
+    Modified androidmanifest for lockscreen
+
+ app/build.gradle                                           |  2 [32m+[m[31m-[m
+ app/src/main/AndroidManifest.xml                           | 14 [32m+++++++++++++[m[31m-[m
+ app/src/main/res/layout/activity_loc
