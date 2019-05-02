@@ -43,7 +43,7 @@ import wavetech.facelocker.utils.PasswordStore;
 
 public class CameraActivity extends AbstractCameraActivity  {
 
-
+  boolean isRecognizing=false;
   private void showToastMessage(String msg){
     Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
   }
@@ -111,9 +111,12 @@ public class CameraActivity extends AbstractCameraActivity  {
 
     }
 
-    if(facesArray.length==1){
+    if(facesArray.length==1 && !isRecognizing){
       try {
-        faceRegister.debounceImageSaveCall(this,duplicateMat, 50);
+        isRecognizing=true;
+        Mat faceMat = new Mat(duplicateMat,facesArray[0]);
+        faceRegister.debounceImageSaveCall(this,faceMat, 200);
+        faceMat.release();
         progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
         if(faceRegister.getSavedImagesCount()>=10){
           //faceRegister.trainModels();
@@ -122,6 +125,7 @@ public class CameraActivity extends AbstractCameraActivity  {
 
           this.runOnUiThread(new Runnable() {
             public void run() {
+              isRecognizing=true;
               try{
                 faceRegister.trainModels(CameraActivity.this.getApplicationContext());
                 Log.v(TAG,"Finish training models");
@@ -174,8 +178,12 @@ public class CameraActivity extends AbstractCameraActivity  {
       catch (Exception e){
         Log.e(TAG,"Exception: "+ e.getMessage());
       }
+      finally {
+        isRecognizing=false;
+      }
       //
     }
+    duplicateMat.release();
 
 
     return mRgba;
