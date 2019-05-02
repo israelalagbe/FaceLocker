@@ -12,6 +12,7 @@ import java.util.List;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
@@ -52,6 +53,7 @@ import static org.opencv.imgcodecs.Imgcodecs.CV_IMWRITE_JPEG_QUALITY;
 //New imports
 import org.bytedeco.javacpp.opencv_face.FaceRecognizer;
 import org.bytedeco.javacpp.opencv_face.FisherFaceRecognizer;
+import org.bytedeco.javacpp.opencv_face.LBPHFaceRecognizer;
 //import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
 
@@ -67,6 +69,7 @@ public class FaceRegister{
   private final String imgPath = Environment.DIRECTORY_PICTURES;
   private final int defaultFaceLabel=1;
   FaceRecognizer faceRecognizer;
+
   static{
     //System.loadLibrary("tbb");
     //System.loadLibrary("opencv_core");
@@ -74,20 +77,59 @@ public class FaceRegister{
   }
   public FaceRegister(){
 
-    faceRecognizer =   FisherFaceRecognizer.create();//com.googlecode.javacv.cpp.opencv_contrib.createLBPHFaceRecognizer(2,8,8,8,200);
+    //faceRecognizer =   FisherFaceRecognizer.create();//com.googlecode.javacv.cpp.opencv_contrib.createLBPHFaceRecognizer(2,8,8,8,200);
   }
-  public void predict(Context context,opencv_core.Mat image) throws IOException{
-    IntPointer label = new IntPointer(defaultFaceLabel);
+  private long lastPredictTime;
+  public boolean predict(Context context,Mat mat) throws IOException{
+
+    //Debounce
+    long lastClickTime = lastPredictTime;
+    long now = System.currentTimeMillis();
+    if (now - lastClickTime < 500) {
+      Log.d(TAG, "Too much predict call ignored");
+      return false;
+    }
+    lastPredictTime=now;
+
+    Mat resizedImg = new Mat();
+    Size size = new Size(200, 200);
+    Imgproc.resize(mat, resizedImg, size);
+    File path = context.getFilesDir();
+    File file = new File(path, "current.jpg");
+    MatOfInt param=new MatOfInt(CV_IMWRITE_JPEG_QUALITY,100);
+    boolean saved=Imgcodecs.imwrite(file.getAbsolutePath(),resizedImg,param);
+
+
+
+
+    opencv_core.Mat image=imread(file.getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
+    IntPointer label = new IntPointer(1);
+    label.put(5);
     DoublePointer confidence = new DoublePointer(1);
-    FaceRecognizer faceRecognizer = FisherFaceRecognizer.create();
+
+
+    if(faceRecognizer==null){
+      File trainingFile=new File(path, "train.xml");
+      faceRecognizer = LBPHFaceRecognizer.create(2,8,8,8,200);
+      faceRecognizer.read(trainingFile.getAbsolutePath());
+    }
     faceRecognizer.predict(image, label, confidence);
     int predictedLabel = label.get(0);
+
+
     Log.v(TAG,"Predicted Label: "+predictedLabel);
+    Log.v(TAG,"Predicted Confidence: "+confidence.get(0));
+
+    image.release();
+    resizedImg.release();
+    if(predictedLabel==defaultFaceLabel && confidence.get(0)<100)
+      return true;
+    return false;
   }
   public void trainModels(Context context) throws IOException{
     FilenameFilter fileNameFilter = new FilenameFilter() {
       public boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".jpg")||name.toLowerCase().endsWith(".jpeg");
+        return /*name.toLowerCase().endsWith(".jpg")||*/name.toLowerCase().endsWith(".jpeg");
 
       };
     };
@@ -96,6 +138,7 @@ public class FaceRegister{
     opencv_core.Mat labels = new opencv_core.Mat(capturedImages.length, 1, opencv_core.CV_32SC1);
     //int[] labels = new int[capturedImages.length];
     MatVector images = new MatVector(capturedImages.length);
+    opencv_core.Mat mats[] =new opencv_core.Mat[capturedImages.length];
     IntBuffer labelsBuf = labels.createBuffer();
     for (int i=0;i<capturedImages.length;i++)
     {
@@ -112,8 +155,9 @@ public class FaceRegister{
 //      opencv_core.IplImage grayImg = opencv_core.IplImage.create(img.width(), img.height(), IPL_DEPTH_8U, 1);
 //      cvCvtColor(img, grayImg, CV_BGR2GRAY);
 //      images.put
-      labelsBuf.put(i, defaultFaceLabel+i);
+      labelsBuf.put(i, defaultFaceLabel);
       images.put(i, img);
+      mats[i]=img;
       //Label corresponding to the id of t
       // he image to be used for recognizing which image it is,
       // I'd be using ID 1 for now
@@ -122,11 +166,14 @@ public class FaceRegister{
 
 
     }
-    FaceRecognizer faceRecognizer = FisherFaceRecognizer.create();
+    FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create(2,8,8,8,200);;
     faceRecognizer.train(images,labels);
     File targetFile=new File(path, "train.xml");
     faceRecognizer.save(targetFile.getAbsolutePath());
     Log.v(TAG,"Saved: "+targetFile.exists()+" image path: " + capturedImages[0].getAbsolutePath());
+
+
+    for(opencv_core.Mat mat:mats) mat.release();
     //opencv_core.Mat testImage=imread(capturedImages[0].getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
     //this.predict(context,testImage);
   }
@@ -155,7 +202,8 @@ public class FaceRegister{
       boolean saved=Imgcodecs.imwrite(filename,resizedImg,param);
       if(!saved)
         throw  new IOException("Failed to save image: "+filename+" to external storage!");
-    }
+      resizedImg.release();
+  }
 
   public int getSavedImagesCount() {
     return savedImagesCount;
@@ -165,11 +213,12 @@ public class FaceRegister{
   public void debounceImageSaveCall(Context context, Mat mat, long delay) throws  IOException{
     long lastClickTime = lastDebounceTime;
     long now = System.currentTimeMillis();
-    lastDebounceTime = now;
+
     if (now - lastClickTime < delay) {
       //Log.d(TAG, "Too much call ignored");
     }
     else{
+      lastDebounceTime = now;
       Log.v(TAG,"Calling save");
       saveMatToImg(context,mat);
     }
