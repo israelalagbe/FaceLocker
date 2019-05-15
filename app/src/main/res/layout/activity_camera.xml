@@ -5,12 +5,19 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   tools:context=".CameraActivity">
-  <org.opencv.android.JavaCameraView
+  <!--<org.opencv.android.JavaCameraView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/camera_view"-->
+    <!--android:visibility="gone"-->
+    <!--/>-->
+  <wavetech.facelocker.CvCameraPreview
+    android:id="@+id/camera_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/camera_view"
-    android:visibility="gone"
-    />
+    android:layout_gravity="center"
+    app:camera_type="front"
+    app:scale_type="full" />
   <!--<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">

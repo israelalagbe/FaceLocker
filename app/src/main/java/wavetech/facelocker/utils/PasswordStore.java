@@ -3,11 +3,15 @@ package wavetech.facelocker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PasswordStore {
   private static final String StorageKey = "Passwords" ;
   private SharedPreferences sharedpreferences;
   private String patternCode;
   private String pinCode;
+  private Map<String,Integer> facesLabels=new HashMap();
   private boolean isScreenLockEnabled;
 
   public  PasswordStore(Context context){
@@ -15,6 +19,8 @@ public class PasswordStore {
     isScreenLockEnabled = sharedpreferences.getBoolean("isScreenLockEnabled",false);
     patternCode = sharedpreferences.getString("patternCode",null);
     pinCode = sharedpreferences.getString("pinCode",null);
+
+    //Map<String,Integer> storedFacesLabels=sharedpreferences.get
   }
 
 
