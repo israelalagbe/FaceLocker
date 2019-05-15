@@ -3,6 +3,9 @@ package wavetech.facelocker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,16 +14,31 @@ public class PasswordStore {
   private SharedPreferences sharedpreferences;
   private String patternCode;
   private String pinCode;
-  private Map<String,Integer> facesLabels=new HashMap();
+  private JSONObject faces;
   private boolean isScreenLockEnabled;
 
-  public  PasswordStore(Context context){
+  public  PasswordStore(Context context) throws Exception{
     sharedpreferences = context.getSharedPreferences(StorageKey, Context.MODE_PRIVATE);
     isScreenLockEnabled = sharedpreferences.getBoolean("isScreenLockEnabled",false);
     patternCode = sharedpreferences.getString("patternCode",null);
     pinCode = sharedpreferences.getString("pinCode",null);
+    JSONParser parser=new JSONParser();
+    faces=  (JSONObject)parser.parse(sharedpreferences.getString("faces","{}")); //sharedpreferences.get
+  }
 
-    //Map<String,Integer> storedFacesLabels=sharedpreferences.get
+  public Map<String, Integer> getFaces() {
+    return faces;
+  }
+  public void clearFaces(){
+    faces.clear();
+  }
+
+  public void addFace(String name,int label){
+    faces.put(name,label);
+  }
+
+  public boolean hasFace(String name){
+    return faces.containsKey(name);
   }
 
 
@@ -53,12 +71,14 @@ public class PasswordStore {
     editor.putBoolean("isScreenLockEnabled",isScreenLockEnabled);
     editor.putString("patternCode", patternCode);
     editor.putString("pinCode", pinCode);
-    editor.commit();
+    editor.putString("faces", (faces).toJSONString());
+    editor.apply();
   }
   public void reset(){
     setPatternCode(null);
     setPinCode(null);
     setIsScreenLockEnabled(false);
+    faces.clear();
     save();
   }
 
