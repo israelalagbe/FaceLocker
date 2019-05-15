@@ -39,13 +39,16 @@ import android.util.Log;
 import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_8U;
 import static org.bytedeco.javacpp.opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
+import static org.bytedeco.javacpp.opencv_imgproc.INTER_AREA;
 import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
+import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
+import static org.bytedeco.javacpp.opencv_imgproc.resize;
 import static org.opencv.core.CvType.CV_32SC1;
 import static org.opencv.imgcodecs.Imgcodecs.CV_IMWRITE_JPEG_QUALITY;
 //import com.googlecode.javacv.cpp.opencv_contrib.FaceRecognizer;
-
 
 
 
@@ -80,7 +83,7 @@ public class FaceRegister{
     //faceRecognizer =   FisherFaceRecognizer.create();//com.googlecode.javacv.cpp.opencv_contrib.createLBPHFaceRecognizer(2,8,8,8,200);
   }
   private long lastPredictTime;
-  public boolean predict(Context context,Mat mat) throws IOException{
+  public boolean predict(Context context,opencv_core.Mat mat) throws IOException{
 
     //Debounce
     long lastClickTime = lastPredictTime;
@@ -91,18 +94,23 @@ public class FaceRegister{
     }
     lastPredictTime=now;
 
-    Mat resizedImg = new Mat();
-    Size size = new Size(200, 200);
-    Imgproc.resize(mat, resizedImg, size);
+//    Mat resizedImg = new Mat();
+//    Size size = new Size(200, 200);
+//    Imgproc.resize(mat, resizedImg, size);
     File path = context.getFilesDir();
     File file = new File(path, "current.jpg");
-    MatOfInt param=new MatOfInt(CV_IMWRITE_JPEG_QUALITY,100);
-    boolean saved=Imgcodecs.imwrite(file.getAbsolutePath(),resizedImg,param);
+//    MatOfInt param=new MatOfInt(CV_IMWRITE_JPEG_QUALITY,100);
+//    boolean saved=Imgcodecs.imwrite(file.getAbsolutePath(),resizedImg,param);
 
 
 
+    opencv_core.Mat resizeimage=new opencv_core.Mat();
+    opencv_core.Size size = new opencv_core.Size(200, 200);
+    resize(mat,resizeimage,size);
+    imwrite(file.getAbsolutePath(),resizeimage);
 
     opencv_core.Mat image=imread(file.getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
+
     IntPointer label = new IntPointer(1);
     label.put(5);
     DoublePointer confidence = new DoublePointer(1);
@@ -121,7 +129,7 @@ public class FaceRegister{
     Log.v(TAG,"Predicted Confidence: "+confidence.get(0));
 
     image.release();
-    resizedImg.release();
+    resizeimage.release();
     if(predictedLabel==defaultFaceLabel && confidence.get(0)<100)
       return true;
     return false;
@@ -177,13 +185,14 @@ public class FaceRegister{
     //opencv_core.Mat testImage=imread(capturedImages[0].getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
     //this.predict(context,testImage);
   }
-  private void saveMatToImg(Context context,Mat mat) throws IOException {
+  private void saveMatToImg(Context context,opencv_core.Mat mat) throws IOException {
 
 
       // Resize image to 100x100
-      Mat resizedImg = new Mat();
-      Size size = new Size(200, 200);
-      Imgproc.resize(mat, resizedImg, size);
+
+      opencv_core.Mat resizeimage=new opencv_core.Mat();
+      opencv_core.Size size = new opencv_core.Size(200, 200);
+      resize(mat,resizeimage,size);
       File path = context.getFilesDir();//Environment.getExternalStoragePublicDirectory(imgPath);
       Log.v(TAG,"Path Exists: "+path.exists()+" Path: "+path.getAbsolutePath());
 
@@ -198,11 +207,10 @@ public class FaceRegister{
 
       //Bitmap for processing and saving image
       //Bitmap bitmap= Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
-      MatOfInt param=new MatOfInt(CV_IMWRITE_JPEG_QUALITY,100);
-      boolean saved=Imgcodecs.imwrite(filename,resizedImg,param);
+      //MatOfInt param=new MatOfInt(CV_IMWRITE_JPEG_QUALITY,100);
+      boolean saved=imwrite(filename,resizeimage);
       if(!saved)
         throw  new IOException("Failed to save image: "+filename+" to external storage!");
-      resizedImg.release();
   }
 
   public int getSavedImagesCount() {
@@ -210,7 +218,7 @@ public class FaceRegister{
   }
 
   private long lastDebounceTime;
-  public void debounceImageSaveCall(Context context, Mat mat, long delay) throws  IOException{
+  public void debounceImageSaveCall(Context context, opencv_core.Mat mat, long delay) throws  IOException{
     long lastClickTime = lastDebounceTime;
     long now = System.currentTimeMillis();
 

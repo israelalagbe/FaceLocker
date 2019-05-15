@@ -22,6 +22,12 @@ android {
         }
     }
 
+    configurations.all{
+      resolutionStrategy.force group:'org.opencv.android', name:'opencv', version:'3.4.3'
+
+      //exclude group: 'org.opencv.android', module: 'library'
+    }
+
 }
 
 dependencies {
@@ -34,11 +40,34 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
-    implementation project(':openCVLibrary343')
+    //implementation project(':openCVLibrary343')
     implementation files('libs/javacv.jar')
     implementation files('libs/javacpp.jar')
     implementation files('libs/ffmpeg.jar')
-    //implementation files('libs/opencv.jar')
+    implementation files('libs/opencv.jar')
+    implementation files('libs/json-simple-1.1.1.jar')
+  /*{
+      exclude group: 'org.opencv.android', module: 'library'
+    }*/
     implementation 'com.eftimoff:android-patternview:1.0.6@aar'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
+
+  //configurations.all {exclude group: 'org.opencv.android', module: 'library'}
+}
+
+
+task findDuplicates {
+  doLast {
+    String findMe = 'javax/annotation/CheckForNull.class'
+    configurations.compile.files.each { file ->
+      if (file.name.endsWith('.jar')) {
+        def classMatches = zipTree(file).matching {
+          include findMe
+        }.files
+        if (!classMatches.empty) {
+          println "Found $findMe in $file ${classMatches.size()} time(s)"
+        }
+      }
+    }
+  }
 }

@@ -15,11 +15,13 @@
     android:visibility="gone"
     android:id="@+id/cameraLayout"
     >
-    <org.opencv.android.JavaCameraView
+    <wavetech.facelocker.CvCameraPreview
+      android:id="@+id/camera_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:id="@+id/camera_view"
-      />
+      android:layout_gravity="center"
+      app:camera_type="front"
+      app:scale_type="full" />
     <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">

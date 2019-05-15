@@ -3,6 +3,7 @@ package wavetech.facelocker;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
@@ -27,8 +28,9 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.JavaCameraView;
+import org.bytedeco.javacpp.opencv_core;
+//import org.opencv.android.CameraBridgeViewBase;
+//import org.opencv.android.JavaCameraView;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -44,8 +46,14 @@ import wavetech.facelocker.utils.LockscreenIntentReceiver;
 import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.LockscreenUtils;
 import wavetech.facelocker.utils.PasswordStore;
+import wavetech.facelocker.utils.StorageHelper;
 
-public class LockScreen extends AbstractCameraActivity
+import static org.bytedeco.javacpp.opencv_core.LINE_8;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
+import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
+import static org.bytedeco.javacpp.opencv_imgproc.rectangle;
+
+public class LockScreen extends AbstractCameraPreviewActivity
   implements
   LockscreenUtils.OnLockStatusChangedListener
 {
@@ -63,50 +71,100 @@ public class LockScreen extends AbstractCameraActivity
   boolean isPredicting=false;
 
   //All camera stuffs goes here
-  /**
-   * Now, this one is interesting! OpenCV orients the camera
-   * to left by 90 degrees. So if the app is in portrait more,
-   * camera will be in -90 or 270 degrees orientation. We fix that in the n
-   * ext and the most important function. There you go!
-   * @param inputFrame
-   * @return
-   */
+//  /**
+//   * Now, this one is interesting! OpenCV orients the camera
+//   * to left by 90 degrees. So if the app is in portrait more,
+//   * camera will be in -90 or 270 degrees orientation. We fix that in the n
+//   * ext and the most important function. There you go!
+//   * @param inputFrame
+//   * @return
+//   */
+//  @Override
+//  public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+//    mRgba = inputFrame.rgba();
+//
+//    // Rotate mRgba 90 degrees
+//    Core.transpose(mRgba, mRgbaT);
+//    Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
+//    //Flip by 180 degrees
+//    Core.flip(mRgbaF, mRgba, -1 );
+//
+//    // Create a grayscale image
+//    Imgproc.cvtColor(mRgba, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
+//
+//    MatOfRect faces = new MatOfRect();
+//
+//    // Use the classifier to detect faces
+//    if (cascadeClassifier != null) {
+//      cascadeClassifier.detectMultiScale(grayscaleImage, faces, 1.1, 2, 2,
+//        new Size(absoluteFaceSize, absoluteFaceSize), new Size());
+//    }
+//
+//    // If there are any faces found, draw a rectangle around it
+//    Rect[] facesArray = faces.toArray();
+//    //So the rectangle won't show in the saved Image but only in the camera
+//    Mat duplicateMat=mRgba.clone();
+//    for (int i = 0; i <facesArray.length; i++) {
+//      Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+//
+//    }
+//
+//    if(facesArray.length==1 && !isPredicting){
+//      try {
+//        isPredicting=true;
+//        Mat faceMat = new Mat(duplicateMat,facesArray[0]);
+//        boolean recognizedFace=faceRegister.predict(this,faceMat);
+//        faceMat.release();
+//        if(recognizedFace) {
+//          this.runOnUiThread(new Runnable() {
+//            public void run() {
+//              isPredicting = true;
+//              unlockDevice();
+//            }
+//          });
+//        }
+//
+//      }catch (IOException e){
+//        Log.e(TAG,"IO Error: "+ e.getMessage());
+//      }
+//      catch (Exception e){
+//        Log.e(TAG,"Exception: "+ e.getMessage());
+//      }
+//      finally {
+//        isPredicting=false;
+//        duplicateMat.release();
+//      }
+//      //
+//    }
+//
+//
+//    return mRgba;
+//  }
+
   @Override
-  public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-    mRgba = inputFrame.rgba();
+  public opencv_core.Mat onCameraFrame(opencv_core.Mat rgbaMat) {
+    if (faceDetector != null) {
+      opencv_core.Mat grayMat = new opencv_core.Mat(rgbaMat.rows(), rgbaMat.cols());
 
-    // Rotate mRgba 90 degrees
-    Core.transpose(mRgba, mRgbaT);
-    Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
-    //Flip by 180 degrees
-    Core.flip(mRgbaF, mRgba, -1 );
+      cvtColor(rgbaMat, grayMat, CV_BGR2GRAY);
 
-    // Create a grayscale image
-    Imgproc.cvtColor(mRgba, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
+      opencv_core.RectVector faces = new opencv_core.RectVector();
+      faceDetector.detectMultiScale(grayMat, faces, 1.25f, 3, 1,
+        new opencv_core.Size(absoluteFaceSize, absoluteFaceSize),
+        new opencv_core.Size(4 * absoluteFaceSize, 4 * absoluteFaceSize));
+      if (faces.size() == 1) {
+        int x = faces.get(0).x();
+        int y = faces.get(0).y();
+        int w = faces.get(0).width();
+        int h = faces.get(0).height();
+        opencv_core.Mat duplicateMat=rgbaMat.clone();
+        rectangle(rgbaMat, new opencv_core.Point(x, y), new opencv_core.Point(x + w, y + h), opencv_core.Scalar.GREEN, 2, LINE_8, 0);
 
-    MatOfRect faces = new MatOfRect();
-
-    // Use the classifier to detect faces
-    if (cascadeClassifier != null) {
-      cascadeClassifier.detectMultiScale(grayscaleImage, faces, 1.1, 2, 2,
-        new Size(absoluteFaceSize, absoluteFaceSize), new Size());
-    }
-
-    // If there are any faces found, draw a rectangle around it
-    Rect[] facesArray = faces.toArray();
-    //So the rectangle won't show in the saved Image but only in the camera
-    Mat duplicateMat=mRgba.clone();
-    for (int i = 0; i <facesArray.length; i++) {
-      Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
-
-    }
-
-    if(facesArray.length==1 && !isPredicting){
-      try {
+        try {
         isPredicting=true;
-        Mat faceMat = new Mat(duplicateMat,facesArray[0]);
-        boolean recognizedFace=faceRegister.predict(this,faceMat);
-        faceMat.release();
+        //Mat faceMat = new Mat(duplicateMat,facesArray[0]);
+        boolean recognizedFace=faceRegister.predict(this,duplicateMat);
+        //faceMat.release();
         if(recognizedFace) {
           this.runOnUiThread(new Runnable() {
             public void run() {
@@ -117,23 +175,23 @@ public class LockScreen extends AbstractCameraActivity
         }
 
       }catch (IOException e){
-        Log.e(TAG,"IO Error: "+ e.getMessage());
+        Log.e(CameraActivity.TAG,"IO Error: "+ e.getMessage());
       }
       catch (Exception e){
-        Log.e(TAG,"Exception: "+ e.getMessage());
+        Log.e(CameraActivity.TAG,"Exception: "+ e.getMessage());
       }
       finally {
         isPredicting=false;
         duplicateMat.release();
       }
-      //
+
+      }
+
+      grayMat.release();
     }
 
-
-    return mRgba;
+    return rgbaMat;
   }
-
-
 
 
   private void initializeListeners(){
@@ -214,8 +272,8 @@ public class LockScreen extends AbstractCameraActivity
     findViewById(R.id.patternLayout).setVisibility(View.GONE);
 
     findViewById(R.id.cameraLayout).setVisibility(View.VISIBLE);
-    mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
-    mOpenCvCameraView.setCvCameraViewListener(this);
+    cameraView.setVisibility(SurfaceView.VISIBLE);
+    cameraView.setCvCameraViewListener(this);
   }
 
   // Set appropriate flags to make the screen appear over the keyguard
@@ -249,11 +307,17 @@ public class LockScreen extends AbstractCameraActivity
     passwordStore= new PasswordStore(getApplicationContext());
     mPatternLockView=findViewById(R.id.pattern_lock_view);
     pinCodeInput = findViewById(R.id.passwordEditText);
-
+    new AsyncTask<Void, Void, Void>() {
+      @Override
+      protected Void doInBackground(Void... voids) {
+        faceDetector = StorageHelper.loadClassifierCascade(LockScreen.this, R.raw.frontalface);
+        return null;
+      }
+    }.execute();
     //OpenCV initializations
-    mOpenCvCameraView = (JavaCameraView) findViewById(R.id.camera_view);
-    mOpenCvCameraView.setCameraIndex(1);
-    mOpenCvCameraView.setVisibility(SurfaceView.GONE);
+    cameraView = findViewById(R.id.camera_view);
+    cameraView.setVisibility(SurfaceView.VISIBLE);
+    cameraView.setCvCameraViewListener(this);
 
     //Hide the action bar
     getSupportActionBar().hide();
