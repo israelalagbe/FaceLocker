@@ -114,11 +114,34 @@
 
       <ListView
         android:id="@+id/mobile_list"
-        android:layout_width="273dp"
-        android:layout_height="93dp"
+        android:layout_width="171dp"
+        android:layout_height="94dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="3dp"></ListView>
+        android:layout_marginStart="3dp"
+
+        >
+
+
+      </ListView>
+
+      <at.markushi.ui.CircleButton
+        android:id="@+id/clearFacesButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        app:cb_color="?attr/colorError"
+        app:cb_pressedRingWidth="8dip"
+        android:text="Clear"
+        android:src="@drawable/remove"
+        android:textColor="@color/white"
+
+        />
     </RelativeLayout>
 
 
