@@ -33,7 +33,6 @@ public class PasswordStore {
       faces=new JSONObject();
       Log.v(CameraActivity.TAG,"JSON object faces error: "+e.getMessage());
     }
-
   }
 
   public Map<String, Integer> getFaces() {

@@ -7,12 +7,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import at.markushi.ui.CircleButton;
 import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.PasswordStore;
 
@@ -22,14 +29,52 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    final int cardMinimizeHeight=200;
+    final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+    final int cardMinimizeHeightPixel = (int) (cardMinimizeHeight * scale + 0.5f);
+
     final PasswordStore passwordStore=new PasswordStore(getApplicationContext());
+    final CircleButton clearFacesButton= findViewById(R.id.clearFacesButton);
+    final ListView listView = findViewById(R.id.faces);
+    final CardView cardView=findViewById(R.id.cardView);
 
+    final ArrayList faces = new ArrayList<String>();
 
-    String[] mobileArray = {"Israel","Steven"};
-    ArrayAdapter adapter = new ArrayAdapter<>(this,
-      R.layout.activity_listview, mobileArray);
-    ListView listView = findViewById(R.id.mobile_list);
+    for(String faceName: passwordStore.getFaces().keySet()){
+      faces.add(faceName);
+    }
+
+    if(faces.isEmpty()){
+      clearFacesButton.setVisibility(View.GONE);
+      listView.setVisibility(View.GONE);
+      ViewGroup.LayoutParams params = cardView.getLayoutParams();
+      params.height = cardMinimizeHeightPixel;
+      cardView.setLayoutParams(params);
+    }
+
+    final ArrayAdapter adapter = new ArrayAdapter<>(this,
+      R.layout.activity_listview, faces);
+
     listView.setAdapter(adapter);
+
+
+    clearFacesButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        faces.clear();
+        adapter.notifyDataSetChanged();
+
+        clearFacesButton.setVisibility(View.GONE);
+        listView.setVisibility(View.GONE);
+        ViewGroup.LayoutParams params = cardView.getLayoutParams();
+        params.height = cardMinimizeHeightPixel;
+        cardView.setLayoutParams(params);
+
+        passwordStore.reset();
+        stopScreenLock();
+        enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
+      }
+    });
 
 
 

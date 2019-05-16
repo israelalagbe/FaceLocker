@@ -113,7 +113,7 @@
       </RelativeLayout>
 
       <ListView
-        android:id="@+id/mobile_list"
+        android:id="@+id/faces"
         android:layout_width="178dp"
         android:layout_height="82dp"
         android:layout_alignParentStart="true"
