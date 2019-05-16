@@ -114,8 +114,8 @@
 
       <ListView
         android:id="@+id/mobile_list"
-        android:layout_width="171dp"
-        android:layout_height="94dp"
+        android:layout_width="178dp"
+        android:layout_height="82dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="3dp"
@@ -136,7 +136,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
         app:cb_color="?attr/colorError"
-        app:cb_pressedRingWidth="8dip"
+        app:cb_pressedRingWidth="15dip"
         android:text="Clear"
         android:src="@drawable/remove"
         android:textColor="@color/white"
