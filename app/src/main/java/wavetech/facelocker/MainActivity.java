@@ -7,7 +7,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -21,6 +23,16 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     final PasswordStore passwordStore=new PasswordStore(getApplicationContext());
+
+
+    String[] mobileArray = {"Israel","Steven"};
+    ArrayAdapter adapter = new ArrayAdapter<>(this,
+      R.layout.activity_listview, mobileArray);
+    ListView listView = findViewById(R.id.mobile_list);
+    listView.setAdapter(adapter);
+
+
+
     enableLockSwitch=findViewById(R.id.enableLockSwitch);
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
     if(passwordStore.getIsScreenLockEnabled())

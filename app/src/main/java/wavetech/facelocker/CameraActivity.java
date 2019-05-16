@@ -141,17 +141,20 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                   new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                      PasswordStore passwordStore = new PasswordStore(getApplicationContext());
-                      passwordStore.setIsScreenLockEnabled(true);
-                      passwordStore.save();
+                      try {
+                        PasswordStore passwordStore = new PasswordStore(getApplicationContext());
+                        passwordStore.setIsScreenLockEnabled(true);
+                        passwordStore.save();
 
-                      startScreenLock();
+                        startScreenLock();
 
-                      Intent intent=new Intent(CameraActivity.this,LockScreen.class);
-                      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                      startActivity(intent);
-                      dialog.dismiss();
+                        Intent intent = new Intent(CameraActivity.this, LockScreen.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        dialog.dismiss();
+                      }catch (Exception e){
 
+                      }
                     }
                   });
                 alertDialog.show();

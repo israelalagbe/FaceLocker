@@ -2,12 +2,15 @@ package wavetech.facelocker.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import wavetech.facelocker.CameraActivity;
 
 public class PasswordStore {
   private static final String StorageKey = "Passwords" ;
@@ -17,13 +20,20 @@ public class PasswordStore {
   private JSONObject faces;
   private boolean isScreenLockEnabled;
 
-  public  PasswordStore(Context context) throws Exception{
+  public  PasswordStore(Context context){
     sharedpreferences = context.getSharedPreferences(StorageKey, Context.MODE_PRIVATE);
     isScreenLockEnabled = sharedpreferences.getBoolean("isScreenLockEnabled",false);
     patternCode = sharedpreferences.getString("patternCode",null);
     pinCode = sharedpreferences.getString("pinCode",null);
     JSONParser parser=new JSONParser();
-    faces=  (JSONObject)parser.parse(sharedpreferences.getString("faces","{}")); //sharedpreferences.get
+    try {
+      faces=  (JSONObject)parser.parse(sharedpreferences.getString("faces","{}")); //sharedpreferences.get
+    }
+    catch (Exception e){
+      faces=new JSONObject();
+      Log.v(CameraActivity.TAG,"JSON object faces error: "+e.getMessage());
+    }
+
   }
 
   public Map<String, Integer> getFaces() {
