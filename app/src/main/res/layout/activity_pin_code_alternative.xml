@@ -17,10 +17,10 @@
     android:textAlignment="center"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.0"></View>
+    app:layout_constraintVertical_bias="1.0"></View>
 
   <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
@@ -47,24 +47,22 @@
 
       <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="228dp"
+        android:layout_height="52dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="66dp"
-        android:layout_marginEnd="53dp"
-        android:layout_marginRight="53dp"
-        android:layout_marginBottom="183dp"
-        android:fontFamily="monospace"
-
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        android:layout_marginBottom="182dp"
         android:paddingHorizontal="5dp"
-        android:text="Enter you pincode!"
+        android:text="Enter you password"
         android:textAlignment="center"
         android:textSize="20sp" />
 
@@ -78,7 +76,6 @@
         android:layout_marginTop="130dp"
         android:layout_marginBottom="125dp"
         android:ems="10"
-        android:textAlignment="center"
         android:focusedByDefault="true"
         android:importantForAutofill="no"
         android:inputType="numberPassword"
@@ -92,11 +89,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="63dp"
-        android:text="Continue"
         android:background="@color/colorPrimary"
+        android:text="Continue"
         android:textColor="@color/white"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
     </RelativeLayout>
 
   </android.support.v7.widget.CardView>

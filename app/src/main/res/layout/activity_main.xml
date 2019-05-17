@@ -25,7 +25,7 @@
   <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="0dp"
-    android:layout_height="300dp"
+    android:layout_height="350dp"
     android:layout_marginStart="42dp"
     android:layout_marginEnd="42dp"
     card_view:cardPreventCornerOverlap="false"
@@ -126,7 +126,7 @@
       </ListView>
 
       <at.markushi.ui.CircleButton
-        android:id="@+id/clearFacesButton"
+        android:id="@+id/addFaceButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
@@ -140,6 +140,24 @@
         android:text="Clear"
         android:src="@drawable/remove"
         android:textColor="@color/white"
+
+        />
+
+      <at.markushi.ui.CircleButton
+        android:id="@+id/clearFacesButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="190dp"
+        android:layout_marginRight="190dp"
+        android:layout_marginBottom="99dp"
+        android:src="@drawable/add_icon"
+        android:text="Clear"
+        android:textColor="@color/white"
+        app:cb_color="?attr/colorError"
+        app:cb_pressedRingWidth="15dip"
 
         />
     </RelativeLayout>

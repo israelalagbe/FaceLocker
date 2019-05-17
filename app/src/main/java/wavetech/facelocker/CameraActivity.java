@@ -109,12 +109,14 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
         opencv_core.Mat duplicateMat=rgbaMat.clone();
         rectangle(rgbaMat, new opencv_core.Point(x, y), new opencv_core.Point(x + w, y + h), opencv_core.Scalar.GREEN, 2, LINE_8, 0);
 
+        if(isRecognizing)
+          return rgbaMat;
         try {
           isRecognizing=true;
-          faceRegister.debounceImageSaveCall(this,duplicateMat, 200);
+          faceRegister.debounceImageSaveCall(this,duplicateMat, 300);
           duplicateMat.release();
           progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
-          if(faceRegister.getSavedImagesCount()>=10){
+          if(faceRegister.getSavedImagesCount()>=10 ){
             //faceRegister.trainModels();
             //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
             //finish();

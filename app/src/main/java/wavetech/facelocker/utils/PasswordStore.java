@@ -19,6 +19,7 @@ public class PasswordStore {
   private String pinCode;
   private JSONObject faces;
   private boolean isScreenLockEnabled;
+  private static String currentFaceName;
 
   public  PasswordStore(Context context){
     sharedpreferences = context.getSharedPreferences(StorageKey, Context.MODE_PRIVATE);
@@ -33,6 +34,15 @@ public class PasswordStore {
       faces=new JSONObject();
       Log.v(CameraActivity.TAG,"JSON object faces error: "+e.getMessage());
     }
+    faces.put("Israel",1);
+  }
+
+  public String getCurrentFaceName() {
+    return currentFaceName;
+  }
+
+  public void setCurrentFaceName(String currentFaceName) {
+    this.currentFaceName = currentFaceName;
   }
 
   public Map<String, Integer> getFaces() {

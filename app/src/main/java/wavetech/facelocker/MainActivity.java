@@ -1,18 +1,23 @@
 package wavetech.facelocker;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -24,7 +29,8 @@ import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.PasswordStore;
 
 public class MainActivity extends AppCompatActivity {
-  Switch enableLockSwitch;
+  private Switch enableLockSwitch;
+  private PasswordStore passwordStore;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
     final int cardMinimizeHeightPixel = (int) (cardMinimizeHeight * scale + 0.5f);
 
-    final PasswordStore passwordStore=new PasswordStore(getApplicationContext());
+    passwordStore=new PasswordStore(getApplicationContext());
     final CircleButton clearFacesButton= findViewById(R.id.clearFacesButton);
     final ListView listView = findViewById(R.id.faces);
     final CardView cardView=findViewById(R.id.cardView);
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     });
 
 
-
+    Button addFaceButton = findViewById(R.id.addFaceButton);
     enableLockSwitch=findViewById(R.id.enableLockSwitch);
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
     if(passwordStore.getIsScreenLockEnabled())
@@ -90,12 +96,19 @@ public class MainActivity extends AppCompatActivity {
       public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
         if(checked){
           askForPermissions();
-          launchPinCodeActivity();
+          askForFaceName();
+          //launchPinCodeActivity();
         }
         else{
           passwordStore.reset();
           stopScreenLock();
         }
+      }
+    });
+    addFaceButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        askForFaceName();
       }
     });
 
@@ -106,6 +119,38 @@ public class MainActivity extends AppCompatActivity {
   private void startScreenLock(){
     startService(new Intent(this, LockscreenService.class));
   }
+
+  private void askForFaceName(){
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("");
+    builder.setCancelable(false);
+
+
+// Set up the input
+    LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+    View promptView = layoutInflater.inflate(R.layout.dialog_text_input, null);
+    builder.setView(promptView);
+    final EditText input = promptView.findViewById(R.id.dialog_input); //new EditText(this);
+    builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int id) {
+        //resultText.setText("Hello, " + editText.getText());
+        String faceName = input.getText().toString();
+        if(faceName.length()<1) {
+          Toast.makeText(MainActivity.this, "Please type in something!", Toast.LENGTH_SHORT).show();
+          return;
+        }
+        else if(passwordStore.hasFace(faceName)){
+          Toast.makeText(MainActivity.this, "Face already exists!, enter another name", Toast.LENGTH_SHORT).show();
+          return;
+        }
+        passwordStore.setCurrentFaceName(faceName);
+        launchPinCodeActivity();
+      }
+    });
+    AlertDialog alert = builder.create();
+    alert.show();
+  }
+
   private void launchPinCodeActivity(){
     Intent intent=new Intent(MainActivity.this,PinCode.class);
     startActivity(intent);
