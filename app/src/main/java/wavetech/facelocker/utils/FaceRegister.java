@@ -34,16 +34,13 @@ public class FaceRegister{
   private int savedImagesCount=0;
   private  static String TAG = CameraActivity.TAG;
   private final String imgPath = Environment.DIRECTORY_PICTURES;
-  private final int defaultFaceLabel=1;
   FaceRecognizer faceRecognizer;
-
   static{
     //System.loadLibrary("tbb");
     //System.loadLibrary("opencv_core");
 
   }
   public FaceRegister(){
-
     //faceRecognizer =   FisherFaceRecognizer.create();//com.googlecode.javacv.cpp.opencv_contrib.createLBPHFaceRecognizer(2,8,8,8,200);
   }
   private long lastPredictTime;
@@ -59,7 +56,7 @@ public class FaceRegister{
     lastPredictTime=now;
     //end Debounce
 
-
+    PasswordStore passwordStore=new PasswordStore(context);
     File path = context.getFilesDir();
     File file = new File(path, "current.jpg");
 
@@ -91,9 +88,14 @@ public class FaceRegister{
 
     image.release();
     resizeimage.release();
-    if(predictedLabel==defaultFaceLabel && confidence.get(0)<100)
+    if(passwordStore.hasFaceLabel(predictedLabel) && confidence.get(0)<100)
       return true;
     return false;
+  }
+  public boolean clearFaceDatabase(Context context){
+    File path = context.getFilesDir();
+    File targetFile=new File(path, "train.xml");
+    return targetFile.delete();
   }
   public void trainModels(Context context) throws IOException{
     FilenameFilter fileNameFilter = new FilenameFilter() {
@@ -105,6 +107,8 @@ public class FaceRegister{
     File path = context.getFilesDir();
     File[] capturedImages=path.listFiles(fileNameFilter);
     opencv_core.Mat labels = new opencv_core.Mat(capturedImages.length, 1, opencv_core.CV_32SC1);
+    PasswordStore passwordStore=new PasswordStore(context);
+    int label=passwordStore.getIncrementFaceLabel();
     //int[] labels = new int[capturedImages.length];
     MatVector images = new MatVector(capturedImages.length);
     opencv_core.Mat mats[] =new opencv_core.Mat[capturedImages.length];
@@ -121,30 +125,25 @@ public class FaceRegister{
 
 
 
-//      opencv_core.IplImage grayImg = opencv_core.IplImage.create(img.width(), img.height(), IPL_DEPTH_8U, 1);
-//      cvCvtColor(img, grayImg, CV_BGR2GRAY);
-//      images.put
-      labelsBuf.put(i, defaultFaceLabel);
+      labelsBuf.put(i, label);
       images.put(i, img);
       mats[i]=img;
-      //Label corresponding to the id of t
-      // he image to be used for recognizing which image it is,
-      // I'd be using ID 1 for now
-      //labels.put(img);
-      //labels[i]=defaultFaceLabel;
-
-
     }
-    FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create(2,8,8,8,200);;
+    File databaseModelFile=new File(path, "train.xml");
+    FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create(2,8,8,8,200);
+    //Read existing faces database
+    if(databaseModelFile.exists())
+      faceRecognizer.read(databaseModelFile.getAbsolutePath());
+
     faceRecognizer.train(images,labels);
-    File targetFile=new File(path, "train.xml");
-    faceRecognizer.save(targetFile.getAbsolutePath());
-    Log.v(TAG,"Saved: "+targetFile.exists()+" image path: " + capturedImages[0].getAbsolutePath());
+
+    faceRecognizer.save(databaseModelFile.getAbsolutePath());
+    passwordStore.addFace(passwordStore.getCurrentFaceName(),label);
+    passwordStore.save();
+    Log.v(TAG,"Saved: "+databaseModelFile.exists()+" image path: " + capturedImages[0].getAbsolutePath());
 
 
     for(opencv_core.Mat mat:mats) mat.release();
-    //opencv_core.Mat testImage=imread(capturedImages[0].getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
-    //this.predict(context,testImage);
   }
   private void saveMatToImg(Context context,opencv_core.Mat mat) throws IOException {
 
