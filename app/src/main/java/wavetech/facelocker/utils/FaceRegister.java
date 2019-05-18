@@ -2,53 +2,22 @@ package wavetech.facelocker.utils;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.opencv_core;
-import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.opencv.android.Utils;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
-
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-
-//import com.googlecode.javacv.cpp.opencv_core;
-//import com.googlecode.javacv.cpp.opencv_core.IplImage;
-//
-//import static com.googlecode.javacv.cpp.opencv_contrib.createEigenFaceRecognizer;
-//import static com.googlecode.javacv.cpp.opencv_core.IPL_DEPTH_8U;
-//import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
-//import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
-//import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
-import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_8U;
 import static org.bytedeco.javacpp.opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
-import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
-import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
-import static org.bytedeco.javacpp.opencv_imgproc.INTER_AREA;
-import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
-import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 import static org.bytedeco.javacpp.opencv_imgproc.resize;
-import static org.opencv.core.CvType.CV_32SC1;
-import static org.opencv.imgcodecs.Imgcodecs.CV_IMWRITE_JPEG_QUALITY;
-//import com.googlecode.javacv.cpp.opencv_contrib.FaceRecognizer;
+
 
 
 
@@ -89,7 +58,7 @@ public class FaceRegister{
     long lastClickTime = lastPredictTime;
     long now = System.currentTimeMillis();
     if (now - lastClickTime < 500) {
-      Log.d(TAG, "Too much predict call ignored");
+      //Log.d(TAG, "Too much predict call ignored");
       return false;
     }
     lastPredictTime=now;
