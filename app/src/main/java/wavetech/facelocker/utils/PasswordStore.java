@@ -34,7 +34,7 @@ public class PasswordStore {
       faces=new JSONObject();
       Log.v(CameraActivity.TAG,"JSON object faces error: "+e.getMessage());
     }
-    faces.put("Israel",1);
+    //faces.put("Israel",1);
   }
 
   public String getCurrentFaceName() {
@@ -47,6 +47,15 @@ public class PasswordStore {
 
   public Map<String, Integer> getFaces() {
     return faces;
+  }
+  public int getIncrementFaceLabel(){
+    int label=0;
+    for ( int faceLabel: getFaces().values()){
+      if(faceLabel > label)
+        label=faceLabel;
+    }
+    label++;
+    return label;
   }
   public void clearFaces(){
     faces.clear();
