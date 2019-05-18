@@ -25,12 +25,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import at.markushi.ui.CircleButton;
+import wavetech.facelocker.utils.FaceRegister;
 import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.PasswordStore;
 
 public class MainActivity extends AppCompatActivity {
   private Switch enableLockSwitch;
   private PasswordStore passwordStore;
+  private FaceRegister faceRegister;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     final int cardMinimizeHeight=200;
     final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
     final int cardMinimizeHeightPixel = (int) (cardMinimizeHeight * scale + 0.5f);
-
+    faceRegister=new FaceRegister();
     passwordStore=new PasswordStore(getApplicationContext());
     final CircleButton clearFacesButton= findViewById(R.id.clearFacesButton);
     CircleButton addFaceButton = findViewById(R.id.addFaceButton);
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         passwordStore.reset();
         stopScreenLock();
+
+        faceRegister.clearFaceDatabase(MainActivity.this);
+
         enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
       }
     });
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
           passwordStore.reset();
+          faceRegister.clearFaceDatabase(MainActivity.this);
           stopScreenLock();
         }
       }
