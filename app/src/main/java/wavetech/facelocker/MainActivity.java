@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     faceRegister=new FaceRegister();
     passwordStore=new PasswordStore(getApplicationContext());
     final CircleButton clearFacesButton= findViewById(R.id.clearFacesButton);
-    CircleButton addFaceButton = findViewById(R.id.addFaceButton);
+    final CircleButton addFaceButton = findViewById(R.id.addFaceButton);
     final ListView listView = findViewById(R.id.faces);
     final CardView cardView=findViewById(R.id.cardView);
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View view) {
         faces.clear();
         adapter.notifyDataSetChanged();
-
+        addFaceButton.setVisibility(View.GONE);
         clearFacesButton.setVisibility(View.GONE);
         listView.setVisibility(View.GONE);
         ViewGroup.LayoutParams params = cardView.getLayoutParams();
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         passwordStore.reset();
         stopScreenLock();
 
-        faceRegister.clearFaceDatabase(MainActivity.this);
+        Log.v(CameraActivity.TAG,"Clearing face database: "+faceRegister.clearFaceDatabase(MainActivity.this));
 
         enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
       }
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
           passwordStore.reset();
-          faceRegister.clearFaceDatabase(MainActivity.this);
+          Log.v(CameraActivity.TAG,"Clearing face database: "+faceRegister.clearFaceDatabase(MainActivity.this));
           stopScreenLock();
         }
       }
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int id) {
         //resultText.setText("Hello, " + editText.getText());
-        String faceName = input.getText().toString();
+        String faceName = input.getText().toString().trim();
         if(faceName.length()<1) {
           Toast.makeText(MainActivity.this, "Please type in something!", Toast.LENGTH_SHORT).show();
           return;

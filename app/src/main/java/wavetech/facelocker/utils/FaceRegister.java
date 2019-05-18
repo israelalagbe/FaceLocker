@@ -139,6 +139,7 @@ public class FaceRegister{
 
     faceRecognizer.save(databaseModelFile.getAbsolutePath());
     passwordStore.addFace(passwordStore.getCurrentFaceName(),label);
+    Log.v(TAG,"Saving Face: Name"+passwordStore.getCurrentFaceName()+" Label:"+label);
     passwordStore.save();
     Log.v(TAG,"Saved: "+databaseModelFile.exists()+" image path: " + capturedImages[0].getAbsolutePath());
 
