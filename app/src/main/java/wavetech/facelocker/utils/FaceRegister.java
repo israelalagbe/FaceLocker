@@ -57,14 +57,12 @@ public class FaceRegister{
       return false;
     }
     lastPredictTime=now;
+    //end Debounce
 
-//    Mat resizedImg = new Mat();
-//    Size size = new Size(200, 200);
-//    Imgproc.resize(mat, resizedImg, size);
+
     File path = context.getFilesDir();
     File file = new File(path, "current.jpg");
-//    MatOfInt param=new MatOfInt(CV_IMWRITE_JPEG_QUALITY,100);
-//    boolean saved=Imgcodecs.imwrite(file.getAbsolutePath(),resizedImg,param);
+
 
 
 
@@ -76,7 +74,6 @@ public class FaceRegister{
     opencv_core.Mat image=imread(file.getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
 
     IntPointer label = new IntPointer(1);
-    label.put(5);
     DoublePointer confidence = new DoublePointer(1);
 
 

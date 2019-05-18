@@ -68,7 +68,9 @@ public class PasswordStore {
   public boolean hasFace(String name){
     return faces.containsKey(name);
   }
-
+  public boolean hasFaceLabel(int label){
+    return getFaces().values().contains(label);
+  }
 
   public String getPatternCode() {
     return patternCode;
