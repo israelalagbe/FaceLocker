@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     });
 
 
-    Button addFaceButton = findViewById(R.id.addFaceButton);
+    CircleButton addFaceButton = findViewById(R.id.addFaceButton);
     enableLockSwitch=findViewById(R.id.enableLockSwitch);
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
     if(passwordStore.getIsScreenLockEnabled())
