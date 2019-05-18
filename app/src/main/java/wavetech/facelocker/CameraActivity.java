@@ -46,7 +46,7 @@ import static org.bytedeco.javacpp.opencv_core.LINE_8;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
 import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 import static org.bytedeco.javacpp.opencv_imgproc.rectangle;
-
+import org.opencv.core.Rect;
 
 public class CameraActivity extends AbstractCameraPreviewActivity  {
   public static String TAG="facelocker.camera";
@@ -103,12 +103,15 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
         int h = faces.get(0).height();
         opencv_core.Mat duplicateMat=rgbaMat.clone();
         rectangle(rgbaMat, new opencv_core.Point(x, y), new opencv_core.Point(x + w, y + h), opencv_core.Scalar.GREEN, 2, LINE_8, 0);
-        duplicateMat=duplicateMat.su
+
         if(isRecognizing)
           return rgbaMat;
+        opencv_core.Mat croppedMat=new opencv_core.Mat(duplicateMat,faces.get(0));
+
         try {
           isRecognizing=true;
-          faceRegister.debounceImageSaveCall(this,duplicateMat, 300);
+          faceRegister.debounceImageSaveCall(this,croppedMat, 300);
+          croppedMat.release();
           duplicateMat.release();
           progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
           if(faceRegister.getSavedImagesCount()>=10 ){
