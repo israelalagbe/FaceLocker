@@ -32,7 +32,7 @@ public class PasswordStore {
     }
     catch (Exception e){
       faces=new JSONObject();
-      Log.v(CameraActivity.TAG,"JSON object faces error: "+e.getMessage());
+      Log.e(CameraActivity.TAG,"JSON object faces error: "+e.getMessage());
     }
     //faces.put("Israel",1);
   }
@@ -43,6 +43,7 @@ public class PasswordStore {
 
   public void setCurrentFaceName(String currentFaceName) {
     this.currentFaceName = currentFaceName;
+    Log.v(CameraActivity.TAG,"Setting Current face: "+ getCurrentFaceName());
   }
 
   public Map<String, Integer> getFaces() {
