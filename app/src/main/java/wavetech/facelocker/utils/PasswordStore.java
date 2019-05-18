@@ -46,14 +46,14 @@ public class PasswordStore {
     Log.v(CameraActivity.TAG,"Setting Current face: "+ getCurrentFaceName());
   }
 
-  public Map<String, Integer> getFaces() {
+  public Map<String, Long> getFaces() {
     return faces;
   }
   public int getIncrementFaceLabel(){
     int label=0;
-    for ( int faceLabel: getFaces().values()){
-      if(faceLabel > label)
-        label=faceLabel;
+    for ( Long faceLabel: getFaces().values()){
+      if(faceLabel.intValue() > label)
+        label=faceLabel.intValue();
     }
     label++;
     return label;
@@ -70,7 +70,7 @@ public class PasswordStore {
     return faces.containsKey(name);
   }
   public boolean hasFaceLabel(int label){
-    return getFaces().values().contains(label);
+    return getFaces().values().contains(new Long(label));
   }
 
   public String getPatternCode() {
