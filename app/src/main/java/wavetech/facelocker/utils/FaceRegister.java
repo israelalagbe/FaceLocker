@@ -28,11 +28,6 @@ import org.bytedeco.javacpp.opencv_face.FisherFaceRecognizer;
 import org.bytedeco.javacpp.opencv_face.LBPHFaceRecognizer;
 //import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
-
-
-
-
-
 import wavetech.facelocker.CameraActivity;
 
 public class FaceRegister{
