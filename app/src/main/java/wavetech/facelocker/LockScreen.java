@@ -149,7 +149,7 @@ public class LockScreen extends AbstractCameraPreviewActivity
       cvtColor(rgbaMat, grayMat, CV_BGR2GRAY);
 
       opencv_core.RectVector faces = new opencv_core.RectVector();
-      faceDetector.detectMultiScale(grayMat, faces, 1.25f, 3, 1,
+      faceDetector.detectMultiScale(grayMat, faces, 1.1, 2, 2,
         new opencv_core.Size(absoluteFaceSize, absoluteFaceSize),
         new opencv_core.Size(4 * absoluteFaceSize, 4 * absoluteFaceSize));
         if (faces.size() == 1) {
