@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     passwordStore=new PasswordStore(getApplicationContext());
     final CircleButton clearFacesButton= findViewById(R.id.clearFacesButton);
+    CircleButton addFaceButton = findViewById(R.id.addFaceButton);
     final ListView listView = findViewById(R.id.faces);
     final CardView cardView=findViewById(R.id.cardView);
 
@@ -50,9 +51,10 @@ public class MainActivity extends AppCompatActivity {
       faces.add(faceName);
     }
 
-    if(faces.isEmpty()){
+    if(faces.isEmpty()||!passwordStore.getIsScreenLockEnabled()){
       clearFacesButton.setVisibility(View.GONE);
       listView.setVisibility(View.GONE);
+      addFaceButton.setVisibility(View.GONE);
       ViewGroup.LayoutParams params = cardView.getLayoutParams();
       params.height = cardMinimizeHeightPixel;
       cardView.setLayoutParams(params);
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     });
 
 
-    CircleButton addFaceButton = findViewById(R.id.addFaceButton);
+
     enableLockSwitch=findViewById(R.id.enableLockSwitch);
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
     if(passwordStore.getIsScreenLockEnabled())
