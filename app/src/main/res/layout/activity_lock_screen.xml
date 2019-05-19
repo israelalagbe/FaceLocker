@@ -6,61 +6,7 @@
   android:layout_height="match_parent"
   android:background="@drawable/background"
   tools:context=".LockScreen">
-
-
-
-  <FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="gone"
-    android:id="@+id/cameraLayout"
-    >
-    <wavetech.facelocker.CvCameraPreview
-      android:id="@+id/camera_view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_gravity="center"
-      app:camera_type="front"
-      app:scale_type="full" />
-    <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="65dp"
-        android:layout_marginLeft="65dp"
-        android:layout_marginBottom="65dp"
-
-
-        android:background="#00000000"
-        android:onClick="showPinCodeView"
-        android:text="Pincode"
-        android:textColor="@color/white" />
-
-      <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="240dp"
-        android:layout_marginLeft="240dp"
-        android:layout_marginBottom="63dp"
-
-        android:background="#00000000"
-        android:onClick="showPatternView"
-        android:text="Pattern"
-        android:textColor="@color/white" />
-    </RelativeLayout>
-  </FrameLayout>
-
+  <include layout="@layout/camera_lock_screen"></include>
   <include layout="@layout/password_lock_screen"></include>
   <include layout="@layout/pattern_lock_screen"></include>
 </android.support.constraint.ConstraintLayout>
