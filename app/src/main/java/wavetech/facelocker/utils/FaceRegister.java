@@ -131,11 +131,15 @@ public class FaceRegister{
     }
     File databaseModelFile=new File(path, "train.xml");
     FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create(2,8,8,8,200);
-    //Read existing faces database
-    if(databaseModelFile.exists())
+    //Read existing faces database, and update with new faces
+    if(databaseModelFile.exists()) {
       faceRecognizer.read(databaseModelFile.getAbsolutePath());
+      faceRecognizer.update(images,labels);
+    }
+    else{
+      faceRecognizer.train(images,labels);
+    }
 
-    faceRecognizer.train(images,labels);
 
     faceRecognizer.save(databaseModelFile.getAbsolutePath());
     passwordStore.addFace(passwordStore.getCurrentFaceName(),label);
