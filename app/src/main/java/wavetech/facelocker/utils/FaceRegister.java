@@ -163,7 +163,6 @@ public class FaceRegister{
       File file = new File(path, filename);
       Log.v(TAG,"Created: "+file.createNewFile());
 
-      Boolean bool = null;
       filename = file.toString();
 
       //Bitmap for processing and saving image
