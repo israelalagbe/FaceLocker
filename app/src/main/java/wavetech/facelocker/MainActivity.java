@@ -153,7 +153,10 @@ public class MainActivity extends AppCompatActivity {
           return;
         }
         passwordStore.setCurrentFaceName(faceName);
-        launchPinCodeActivity();
+        if(passwordStore.getFaces().size()>0)
+          launchCameraActivity();
+        else
+          launchPinCodeActivity();
       }
     });
     AlertDialog alert = builder.create();
@@ -162,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
 
   private void launchPinCodeActivity(){
     Intent intent=new Intent(MainActivity.this,PinCode.class);
+    startActivity(intent);
+  }
+  private void launchCameraActivity(){
+    Intent intent=new Intent(MainActivity.this,CameraActivity.class);
     startActivity(intent);
   }
   private void askForPermissions(){
