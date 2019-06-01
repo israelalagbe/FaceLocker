@@ -52,7 +52,7 @@ dependencies {
     implementation 'com.eftimoff:android-patternview:1.0.6@aar'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation 'com.github.markushi:circlebutton:1.1'
-
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
   //configurations.all {exclude group: 'org.opencv.android', module: 'library'}
 }
 
