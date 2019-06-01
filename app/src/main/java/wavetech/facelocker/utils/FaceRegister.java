@@ -31,6 +31,7 @@ import org.bytedeco.javacpp.opencv_core.MatVector;
 import wavetech.facelocker.CameraActivity;
 
 public class FaceRegister{
+  private static final int maxImages=30;
   private int savedImagesCount=0;
   private  static String TAG = CameraActivity.TAG;
   private final String imgPath = Environment.DIRECTORY_PICTURES;
@@ -43,6 +44,11 @@ public class FaceRegister{
   public FaceRegister(){
     //faceRecognizer =   FisherFaceRecognizer.create();//com.googlecode.javacv.cpp.opencv_contrib.createLBPHFaceRecognizer(2,8,8,8,200);
   }
+
+  public static int getMaxImages() {
+    return maxImages;
+  }
+
   private long lastPredictTime;
   public boolean predict(Context context,opencv_core.Mat mat) throws IOException{
 
@@ -161,7 +167,7 @@ public class FaceRegister{
       File path = context.getFilesDir();//Environment.getExternalStoragePublicDirectory(imgPath);
       Log.v(TAG,"Path Exists: "+path.exists()+" Path: "+path.getAbsolutePath());
 
-      if (savedImagesCount<10) savedImagesCount++;
+      if (savedImagesCount<getMaxImages()) savedImagesCount++;
 
       String filename = "pic" + savedImagesCount + ".jpeg";
       File file = new File(path, filename);
