@@ -124,7 +124,7 @@ public class FaceRegister{
 
       File imageFile=capturedImages[i];
       opencv_core.Mat img = imread(imageFile.getAbsolutePath(), CV_LOAD_IMAGE_GRAYSCALE);
-
+      imageFile.delete();
       if(img==null){
         throw  new IOException("Unable to load CV IMage from path: "+imageFile.getAbsolutePath());
       }
