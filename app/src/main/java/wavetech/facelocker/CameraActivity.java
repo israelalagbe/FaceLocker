@@ -113,8 +113,8 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
           faceRegister.debounceImageSaveCall(this,croppedMat, 300);
           croppedMat.release();
           duplicateMat.release();
-          progressLoader.setProgress(faceRegister.getSavedImagesCount()*10);
-          if(faceRegister.getSavedImagesCount()>=10 ){
+          progressLoader.setProgress(faceRegister.getSavedImagesCount()*100/FaceRegister.getMaxImages());
+          if(faceRegister.getSavedImagesCount()>=FaceRegister.getMaxImages() ){
             //faceRegister.trainModels();
             //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
             //finish();
