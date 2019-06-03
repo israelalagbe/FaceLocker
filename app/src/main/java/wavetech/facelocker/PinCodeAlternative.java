@@ -35,7 +35,7 @@ public class PinCodeAlternative extends AppCompatActivity {
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         pinCodeText=charSequence.toString();
-        if(pinCodeText.length()>8)
+        if(pinCodeText.length()>=8)
           btnContinue.setVisibility(View.VISIBLE);
       }
 
