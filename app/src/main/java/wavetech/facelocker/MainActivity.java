@@ -29,6 +29,7 @@ import at.markushi.ui.CircleButton;
 import wavetech.facelocker.utils.FaceRegister;
 import wavetech.facelocker.utils.LockscreenService;
 import wavetech.facelocker.utils.PasswordStore;
+import wavetech.facelocker.utils.TourHelper;
 
 public class MainActivity extends AppCompatActivity {
   private Switch enableLockSwitch;
@@ -96,9 +97,10 @@ public class MainActivity extends AppCompatActivity {
     enableLockSwitch.setChecked(passwordStore.getIsScreenLockEnabled());
     if(passwordStore.getIsScreenLockEnabled())
       startScreenLock();
+    else
+      TourHelper.showEnableButtonTour(this,enableLockSwitch,"Enable Button","Tap this button now to enable face locker");
 
     askForPermissions();
-//    Toast.makeText(getApplicationContext(),"Pincode:"+passwordStore.getPinCode()+" Pattern code: "+passwordStore.getPatternCode(),Toast.LENGTH_LONG).show();
     enableLockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -115,11 +117,11 @@ public class MainActivity extends AppCompatActivity {
       }
     });
     addFaceButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        askForFaceName();
-      }
-    });
+    @Override
+    public void onClick(View view) {
+      askForFaceName();
+    }
+  });
 
   }
   private void stopScreenLock(){
