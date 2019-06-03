@@ -163,7 +163,7 @@ public class LockScreen extends AbstractCameraPreviewActivity
               isPredicting=true;
               //Mat faceMat = new Mat(duplicateMat,facesArray[0]);
               opencv_core.Mat croppedMat=new opencv_core.Mat(duplicateMat,faces.get(0));
-              boolean recognizedFace=faceRegister.predict(this,croppedMat);
+              boolean recognizedFace=faceRegister.predict(this,duplicateMat);
               croppedMat.release();
               //faceMat.release();
               if(recognizedFace) {

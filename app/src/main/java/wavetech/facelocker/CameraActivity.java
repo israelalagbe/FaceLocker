@@ -110,7 +110,7 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
 
         try {
           isRecognizing=true;
-          faceRegister.debounceImageSaveCall(this,croppedMat, 300);
+          faceRegister.debounceImageSaveCall(this,duplicateMat, 300);
           croppedMat.release();
           duplicateMat.release();
           progressLoader.setProgress(faceRegister.getSavedImagesCount()*100/FaceRegister.getMaxImages());
