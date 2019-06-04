@@ -80,42 +80,38 @@ public class LockScreen extends AbstractCameraPreviewActivity
       faceDetector.detectMultiScale(grayMat, faces, 1.1, 2, 2,
         new opencv_core.Size(absoluteFaceSize, absoluteFaceSize),
         new opencv_core.Size(4 * absoluteFaceSize, 4 * absoluteFaceSize));
-        if (faces.size() == 1) {
-            int x = faces.get(0).x();
-            int y = faces.get(0).y();
-            int w = faces.get(0).width();
-            int h = faces.get(0).height();
-            opencv_core.Mat duplicateMat=rgbaMat.clone();
-            rectangle(rgbaMat, new opencv_core.Point(x, y), new opencv_core.Point(x + w, y + h), opencv_core.Scalar.GREEN, 2, LINE_8, 0);
-            try {
-              isPredicting=true;
-              //Mat faceMat = new Mat(duplicateMat,facesArray[0]);
-              opencv_core.Mat croppedMat=new opencv_core.Mat(duplicateMat,faces.get(0));
-              boolean recognizedFace=faceRegister.predict(this,duplicateMat);
-              croppedMat.release();
-              //faceMat.release();
-              if(recognizedFace) {
-                this.runOnUiThread(new Runnable() {
-                  public void run() {
-                    isPredicting = true;
-                    unlockDevice();
-                  }
-                });
-              }
-
-          }catch (IOException e){
-            Log.e(CameraActivity.TAG,"IO Error: "+ e.getMessage());
-          }
-          catch (Exception e){
-            Log.e(CameraActivity.TAG,"Exception: "+ e.getMessage());
-          }
-          finally {
-            isPredicting=false;
-            duplicateMat.release();
-          }
-
+      opencv_core.Mat duplicateMat=rgbaMat.clone();
+      if (faces.size() == 1) {
+          int x = faces.get(0).x();
+          int y = faces.get(0).y();
+          int w = faces.get(0).width();
+          int h = faces.get(0).height();
+          rectangle(rgbaMat, new opencv_core.Point(x, y), new opencv_core.Point(x + w, y + h), opencv_core.Scalar.GREEN, 2, LINE_8, 0);
       }
+      try {
+        isPredicting=true;
+        //Mat faceMat = new Mat(duplicateMat,facesArray[0]);
+        boolean recognizedFace=faceRegister.predict(this,duplicateMat);
+        //faceMat.release();
+        if(recognizedFace) {
+          this.runOnUiThread(new Runnable() {
+            public void run() {
+              isPredicting = true;
+              unlockDevice();
+            }
+          });
+        }
 
+      }catch (IOException e){
+        Log.e(CameraActivity.TAG,"IO Error: "+ e.getMessage());
+      }
+      catch (Exception e){
+        Log.e(CameraActivity.TAG,"Exception: "+ e.getMessage());
+      }
+      finally {
+        isPredicting=false;
+        duplicateMat.release();
+      }
       grayMat.release();
     }
 
