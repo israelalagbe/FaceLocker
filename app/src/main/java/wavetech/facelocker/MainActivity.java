@@ -10,18 +10,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.ArrayList;
 
@@ -63,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
       params.height = cardMinimizeHeightPixel;
       cardView.setLayoutParams(params);
     }
+    else {
+      TourHelper.showTourForView(this,addFaceButton,"Add new Face","Tap this button to add a new face to the database",new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+        @Override
+        public void onTargetClick(TapTargetView view) {
+          super.onTargetClick(view);      // This call is optional
+          TourHelper.showTourForView(MainActivity.this,clearFacesButton,"Delete Faces","Tap this button to delete existing faces from the database");
+        }
+      });
+    }
 
     final ArrayAdapter adapter = new ArrayAdapter<>(this,
       R.layout.activity_listview, faces);
@@ -98,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     if(passwordStore.getIsScreenLockEnabled())
       startScreenLock();
     else
-      TourHelper.showEnableButtonTour(this,enableLockSwitch,"Enable Button","Tap this button now to enable face locker");
+      TourHelper.showTourForView(this,enableLockSwitch,"Enable Switch","Tap this switch now to enable face locker");
 
     askForPermissions();
     enableLockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -166,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void launchPinCodeActivity(){
-    Intent intent=new Intent(MainActivity.this,PinCode.class);
+    Intent intent=new Intent(MainActivity.this,PatternActivity.class);
     startActivity(intent);
   }
   private void launchCameraActivity(){

@@ -33,7 +33,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".PinCode"
+      android:name=".PatternActivity"
       android:label="@string/pin_code_activity_name" />
     <activity android:name=".CameraActivity" />
     <activity
@@ -58,7 +58,7 @@
       </intent-filter>
     </receiver>
 
-    <activity android:name=".PinCodeAlternative" />
+    <activity android:name=".PincodeActivity" />
   </application>
 
 </manifest>
