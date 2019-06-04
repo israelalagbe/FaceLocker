@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import wavetech.facelocker.utils.PasswordStore;
+import com.getkeepsafe.taptargetview.TapTargetView;
 
-public class PinCodeAlternative extends AppCompatActivity {
+import wavetech.facelocker.utils.PasswordStore;
+import wavetech.facelocker.utils.TourHelper;
+
+public class PincodeActivity extends AppCompatActivity {
   private EditText pinCodeInput;
   private Button btnContinue;
   String pinCodeText="";
@@ -23,6 +26,7 @@ public class PinCodeAlternative extends AppCompatActivity {
     passwordStore= new PasswordStore(getApplicationContext());
     pinCodeInput = findViewById(R.id.pinCodeInput);
     btnContinue=findViewById(R.id.btnContinue);
+    TourHelper.showTourForView(this,pinCodeInput,"Password","Please enter your password not less than 8 characters");
     initializeListeners();
   }
   private void initializeListeners(){
@@ -35,8 +39,16 @@ public class PinCodeAlternative extends AppCompatActivity {
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         pinCodeText=charSequence.toString();
-        if(pinCodeText.length()>=8)
+        if(pinCodeText.length()>=8){
           btnContinue.setVisibility(View.VISIBLE);
+          TourHelper.showTourForView(PincodeActivity.this,btnContinue,"Save button","Click this button now to go to the next stage" ,new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+            @Override
+            public void onTargetClick(TapTargetView view) {
+              super.onTargetClick(view);      // This call is optional
+              continueButtonClick();
+            }
+          });
+        }
       }
 
       @Override
@@ -48,14 +60,17 @@ public class PinCodeAlternative extends AppCompatActivity {
     btnContinue.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        passwordStore.setPinCode(pinCodeText);
-        passwordStore.save();
-        launchCameraActivity();
+        continueButtonClick();
       }
     });
   }
   private void launchCameraActivity(){
-    Intent intent=new Intent(PinCodeAlternative.this,CameraActivity.class);
+    Intent intent=new Intent(PincodeActivity.this,CameraActivity.class);
     startActivity(intent);
+  }
+  private void continueButtonClick(){
+    passwordStore.setPinCode(pinCodeText);
+    passwordStore.save();
+    launchCameraActivity();
   }
 }

@@ -11,12 +11,14 @@ import android.widget.Toast;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
+import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.List;
 
 import wavetech.facelocker.utils.PasswordStore;
+import wavetech.facelocker.utils.TourHelper;
 
-public class PinCode extends AppCompatActivity {
+public class PatternActivity extends AppCompatActivity {
   private PatternLockView mPatternLockView;
   private Button continueButton;
   private PasswordStore passwordStore;
@@ -37,7 +39,7 @@ public class PinCode extends AppCompatActivity {
 
   }
   private void launchAlternativePincodeActivity(){
-    Intent intent=new Intent(PinCode.this,PinCodeAlternative.class);
+    Intent intent=new Intent(PatternActivity.this,PincodeActivity.class);
     startActivity(intent);
   }
   private void initializeListeners(){
@@ -72,7 +74,13 @@ public class PinCode extends AppCompatActivity {
           PatternLockUtils.patternToString(mPatternLockView, pattern));
         passwordStore.setPatternCode(PatternLockUtils.patternToString(mPatternLockView, pattern));
         continueButton.setVisibility(View.VISIBLE);
-
+        TourHelper.showTourForView(PatternActivity.this,continueButton,"Save button","Click this button now to go to the next stage" ,new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+          @Override
+          public void onTargetClick(TapTargetView view) {
+            super.onTargetClick(view);      // This call is optional
+            launchAlternativePincodeActivity();
+          }
+        });
       }
 
       @Override

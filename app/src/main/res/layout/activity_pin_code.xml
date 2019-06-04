@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/background"
-  tools:context=".PinCode">
+  tools:context=".PatternActivity">
 
   <View
     android:id="@+id/opacityFilter"
