@@ -94,7 +94,7 @@ public class FaceRegister{
 
     image.release();
     resizeimage.release();
-    if(passwordStore.hasFaceLabel(predictedLabel) && confidence.get(0)<90)
+    if(passwordStore.hasFaceLabel(predictedLabel) && confidence.get(0)<84)
       return true;
     return false;
   }
