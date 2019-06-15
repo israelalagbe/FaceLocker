@@ -43,12 +43,13 @@
       android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+
         <category android:name="android.intent.category.HOME" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
 
-    <service android:name=".utils.LockscreenService"></service>
+    <service android:name=".utils.LockscreenService" />
 
     <receiver
       android:name=".utils.LockscreenIntentReceiver"
@@ -59,6 +60,7 @@
     </receiver>
 
     <activity android:name=".PincodeActivity" />
+    <activity android:name=".Tutorial"></activity>
   </application>
 
 </manifest>

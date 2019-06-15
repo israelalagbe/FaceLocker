@@ -22,10 +22,10 @@ android {
         }
     }
 
-    configurations.all{
-      resolutionStrategy.force group:'org.opencv.android', name:'opencv', version:'3.4.3'
+    configurations.all {
+        resolutionStrategy.force group: 'org.opencv.android', name: 'opencv', version: '3.4.3'
 
-      //exclude group: 'org.opencv.android', module: 'library'
+        //exclude group: 'org.opencv.android', module: 'library'
     }
 
 }
@@ -46,29 +46,29 @@ dependencies {
     implementation files('libs/ffmpeg.jar')
     implementation files('libs/opencv.jar')
     implementation files('libs/json-simple-1.1.1.jar')
-  /*{
+    /*{
       exclude group: 'org.opencv.android', module: 'library'
     }*/
     implementation 'com.eftimoff:android-patternview:1.0.6@aar'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation 'com.github.markushi:circlebutton:1.1'
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
-  //configurations.all {exclude group: 'org.opencv.android', module: 'library'}
+    //configurations.all {exclude group: 'org.opencv.android', module: 'library'}
 }
 
 
 task findDuplicates {
-  doLast {
-    String findMe = 'javax/annotation/CheckForNull.class'
-    configurations.compile.files.each { file ->
-      if (file.name.endsWith('.jar')) {
-        def classMatches = zipTree(file).matching {
-          include findMe
-        }.files
-        if (!classMatches.empty) {
-          println "Found $findMe in $file ${classMatches.size()} time(s)"
+    doLast {
+        String findMe = 'javax/annotation/CheckForNull.class'
+        configurations.compile.files.each { file ->
+            if (file.name.endsWith('.jar')) {
+                def classMatches = zipTree(file).matching {
+                    include findMe
+                }.files
+                if (!classMatches.empty) {
+                    println "Found $findMe in $file ${classMatches.size()} time(s)"
+                }
+            }
         }
-      }
     }
-  }
 }
