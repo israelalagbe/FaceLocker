@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
-    //implementation project(':openCVLibrary343')
+    implementation project(':library')
     implementation files('libs/javacv.jar')
     implementation files('libs/javacpp.jar')
     implementation files('libs/ffmpeg.jar')
