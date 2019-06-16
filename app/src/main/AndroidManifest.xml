@@ -60,7 +60,7 @@
     </receiver>
 
     <activity android:name=".PincodeActivity" />
-    <activity android:name=".Tutorial"></activity>
+    <activity android:name=".Tutorial" android:label="Tutorial"></activity>
   </application>
 
 </manifest>

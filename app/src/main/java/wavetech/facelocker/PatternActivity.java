@@ -78,6 +78,7 @@ public class PatternActivity extends AppCompatActivity {
           @Override
           public void onTargetClick(TapTargetView view) {
             super.onTargetClick(view);      // This call is optional
+            passwordStore.save();
             launchAlternativePincodeActivity();
           }
         });

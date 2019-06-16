@@ -167,17 +167,17 @@ public class MainActivity extends AppCompatActivity {
         if(passwordStore.getFaces().size()>0)
           launchCameraActivity();
         else
-          launchPinCodeActivity();
+          launchTutorialActivity();
       }
     });
     AlertDialog alert = builder.create();
     alert.show();
   }
-
-  private void launchPinCodeActivity(){
-    Intent intent=new Intent(MainActivity.this,PatternActivity.class);
+  private void launchTutorialActivity(){
+    Intent intent=new Intent(MainActivity.this,Tutorial.class);
     startActivity(intent);
   }
+
   private void launchCameraActivity(){
     Intent intent=new Intent(MainActivity.this,CameraActivity.class);
     startActivity(intent);
