@@ -26,7 +26,7 @@ public class PincodeActivity extends AppCompatActivity {
     passwordStore= new PasswordStore(getApplicationContext());
     pinCodeInput = findViewById(R.id.pinCodeInput);
     btnContinue=findViewById(R.id.btnContinue);
-    TourHelper.showTourForView(this,pinCodeInput,"Password","Please enter your password not less than 8 characters");
+    TourHelper.showTourForView(this,pinCodeInput,"Password","Please enter your password not less than 4 characters");
     initializeListeners();
   }
   private void initializeListeners(){
@@ -39,7 +39,7 @@ public class PincodeActivity extends AppCompatActivity {
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         pinCodeText=charSequence.toString();
-        if(pinCodeText.length()>=8){
+        if(pinCodeText.length()>=4){
           btnContinue.setVisibility(View.VISIBLE);
           TourHelper.showTourForView(PincodeActivity.this,btnContinue,"Save button","Click this button now to go to the next stage" ,new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
             @Override
