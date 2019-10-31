@@ -1,7 +1,7 @@
 # FaceLocker
 A machine learning android application that helps to lock your android phone using face recognition.
 ### Download App
-<a href='files/FaceLocker.apk'><img width='150px' src='files/1566835944486.jpeg'></a>
+<a href='https://israelalagbe.github.io/FaceLocker/files/FaceLocker.apk'><img width='150px' src='files/1566835944486.jpeg'></a>
 
 ### Features
 - Automatic Lock
