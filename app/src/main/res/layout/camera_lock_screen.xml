@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:visibility="visible"
+  android:id="@+id/cameraLayout"
+  >
+
+    <wavetech.facelocker.CvCameraPreview
+      android:id="@+id/camera_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      app:camera_type="front"
+      app:scale_type="full" />
+  <LinearLayout
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginBottom="1dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/pattern_lock_view"
+    android:gravity="center_horizontal"
+    >
+    <Button
+      android:id="@+id/button13"
+      android:layout_width="132dp"
+      android:layout_height="45dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:background="#00000000"
+      android:onClick="showPinCodeView"
+      android:text="Pincode"
+      android:textColor="@color/white"
+      />
+
+    <Button
+      android:id="@+id/button14"
+      android:layout_width="132dp"
+      android:layout_height="45dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentBottom="true"
+      android:background="#00000000"
+      android:onClick="showPatternView"
+      android:text="Pattern"
+      android:textColor="@color/white" />
+  </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

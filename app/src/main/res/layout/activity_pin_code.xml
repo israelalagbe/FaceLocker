@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/background"
+  tools:context=".PatternActivity">
+
+  <View
+    android:id="@+id/opacityFilter"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    android:layout_alignParentBottom="true"
+    android:alpha="0.7"
+    android:background="#000"
+    android:textAlignment="center"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0"></View>
+
+  <!-- <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="0dp"
+    android:layout_height="300dp"
+    android:layout_marginStart="42dp"
+    android:layout_marginEnd="42dp"
+    android:elevation="5dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardPreventCornerOverlap="false"
+    card_view:layout_constraintBottom_toBottomOf="parent"
+    card_view:layout_constraintEnd_toEndOf="parent"
+    card_view:layout_constraintHorizontal_bias="1.0"
+    card_view:layout_constraintStart_toStartOf="parent"
+    card_view:layout_constraintTop_toTopOf="parent"
+    card_view:layout_constraintVertical_bias="0.527">-->
+
+  <RelativeLayout
+    android:id="@+id/relativeLayout"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.andrognito.patternlockview.PatternLockView
+      android:id="@+id/pattern_lock_view"
+      android:layout_width="280dp"
+      android:layout_height="280dp"
+      android:layout_centerInParent="true"
+      app:correctStateColor="@color/colorPrimary"
+      app:normalStateColor="@color/white"
+
+      app:wrongStateColor="@color/colorPrimary" />
+    <!--<TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginBottom="163dp"
+        android:fontFamily="@font/roboto_thin"
+        android:paddingHorizontal="5dp"
+        android:text="Please enter a complemetary pincode!"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        />
+
+      <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="171dp"
+        android:layout_marginBottom="84dp"
+        android:ems="10"
+        android:inputType="numberPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        />-->
+    <Button
+      android:id="@+id/continueBtn"
+      android:layout_width="112dp"
+      android:layout_height="31dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="103dp"
+      android:layout_marginLeft="103dp"
+      android:layout_marginEnd="106dp"
+      android:layout_marginRight="106dp"
+      android:layout_marginBottom="60dp"
+      android:background="@color/white"
+      android:elevation="10dp"
+      android:text="Save"
+      android:textColor="@color/colorPrimary"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="@+id/cardView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+      android:id="@+id/textView2"
+      android:layout_width="318dp"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="23dp"
+      android:layout_marginLeft="23dp"
+      android:layout_marginTop="38dp"
+      android:layout_marginEnd="19dp"
+      android:layout_marginRight="19dp"
+      android:layout_marginBottom="415dp"
+      android:fontFamily="@font/roboto_thin"
+      android:paddingHorizontal="5dp"
+      android:text="Draw your pattern!"
+      android:textAlignment="center"
+      android:textColor="@color/white"
+      android:textSize="20sp" />
+  </RelativeLayout>
+
+  <!--  </android.support.v7.widget.CardView>-->
+
+
+</android.support.constraint.ConstraintLayout>
