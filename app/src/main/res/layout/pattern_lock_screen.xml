@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/patternLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:visibility="gone"
+  >
+
+  <com.andrognito.patternlockview.PatternLockView
+    android:id="@+id/pattern_lock_view"
+    android:layout_width="280dp"
+    android:layout_height="280dp"
+    android:layout_centerInParent="true"
+    android:layout_marginStart="40dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginTop="83dp"
+    android:layout_marginEnd="40dp"
+    android:layout_marginRight="40dp"
+    android:layout_marginBottom="47dp"
+    app:correctStateColor="@color/colorPrimary"
+    app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:normalStateColor="@color/white"
+    app:wrongStateColor="@color/colorPrimary" />
+
+  <LinearLayout
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginBottom="1dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/pattern_lock_view"
+    android:gravity="center_horizontal"
+    >
+    <Button
+      android:id="@+id/button13"
+      android:layout_width="132dp"
+      android:layout_height="45dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:background="#00000000"
+      android:onClick="showPinCodeView"
+      android:text="Pincode"
+      android:textColor="@color/white"
+      />
+
+    <Button
+      android:id="@+id/button14"
+      android:layout_width="132dp"
+      android:layout_height="45dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentBottom="true"
+      android:background="#00000000"
+      android:onClick="showCameraView"
+      android:text="Camera"
+      android:textColor="@color/white" />
+  </LinearLayout>
+</android.support.constraint.ConstraintLayout>
