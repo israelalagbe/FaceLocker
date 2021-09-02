@@ -29,7 +29,6 @@ public class LockscreenService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
 	}
 
 	// Register for Lockscreen event intents
@@ -39,31 +38,17 @@ public class LockscreenService extends Service {
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		mReceiver = new LockscreenIntentReceiver();
 		registerReceiver(mReceiver, filter);
-<<<<<<< HEAD
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 			startMyOwnForeground();
 		else
 			startForeground(1, new Notification());
 
-=======
-		startForeground();
->>>>>>> 2d682c4ac1e52fb4fc61f89c509d443f38173743
 		return START_STICKY;
 	}
 
 	// Run service in foreground so it is less likely to be killed by system
 	private void startMyOwnForeground() {
-//		Notification notification = new NotificationCompat.Builder(this)
-//		 .setContentTitle(getResources().getString(R.string.app_name))
-//		 .setTicker(getResources().getString(R.string.app_name))
-//		 .setContentText("Running")
-//		 .setSmallIcon(R.drawable.face_icon_logo)
-//		 .setContentIntent(null)
-//		 .setOngoing(true)
-//		 .build();
-//		 startForeground(9999,notification);
-
 		String NOTIFICATION_CHANNEL_ID = "wavetech.facelocker";
 		String channelName = "LockScreenService";
 		NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
