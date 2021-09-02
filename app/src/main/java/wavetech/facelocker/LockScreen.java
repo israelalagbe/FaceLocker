@@ -122,26 +122,14 @@ public class LockScreen extends AbstractCameraPreviewActivity
   private void initializeListeners(){
     patternLockViewListener=new PatternLockViewListener() {
       @Override
-      public void onStarted() {
-      /*Log.v(getClass().getName(), "Pattern drawing started");
-      showToastMessage("Pattern drawing has started");*/
-
-      }
+      public void onStarted() {}
 
       @Override
       public void onProgress(List<PatternLockView.Dot> progressPattern) {
-      /*Log.v(getClass().getName(), "Pattern progress: " +
-        PatternLockUtils.patternToString(mPatternLockView, progressPattern));
-      showToastMessage("Pattern progress: " +
-        PatternLockUtils.patternToString(mPatternLockView, progressPattern));*/
       }
 
       @Override
       public void onComplete(List<PatternLockView.Dot> pattern) {
-//      showToastMessage("Pattern complete: " +
-//        PatternLockUtils.patternToString(mPatternLockView, pattern));
-        //Log.v(getClass().getName(), "Pattern complete: " +
-          //PatternLockUtils.patternToString(mPatternLockView, pattern));
         String patternInput=PatternLockUtils.patternToString(mPatternLockView, pattern);
         if(passwordStore.getPatternCode().equals(patternInput))
           unlockDevice();
@@ -154,7 +142,6 @@ public class LockScreen extends AbstractCameraPreviewActivity
       @Override
       public void onCleared() {
         Log.v(getClass().getName(), "Pattern has been cleared");
-        //showToastMessage("pattern cleard");
       }
     };
     mPatternLockView.addPatternLockListener(patternLockViewListener);
@@ -165,7 +152,6 @@ public class LockScreen extends AbstractCameraPreviewActivity
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
           String pinCode=passwordStore.getPinCode();
-          //Toast.makeText(getApplicationContext(),"Saved: " + pinCode+" Current: "+pinCodeInput.getText().toString(),Toast.LENGTH_SHORT).show();
           if(pinCode.equals(pinCodeInput.getText().toString()))
             unlockDevice();
           else{
@@ -189,8 +175,6 @@ public class LockScreen extends AbstractCameraPreviewActivity
     findViewById(R.id.patternLayout).setVisibility(View.GONE);
 
     findViewById(R.id.cameraLayout).setVisibility(View.GONE);
-    //mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
-    //mOpenCvCameraView.setCvCameraViewListener(null);
   }
   public void showCameraView(View v){
     findViewById(R.id.pinCodeLayout).setVisibility(View.GONE);
@@ -204,17 +188,7 @@ public class LockScreen extends AbstractCameraPreviewActivity
   // Set appropriate flags to make the screen appear over the keyguard
   @Override
   public void onAttachedToWindow() {
-    /*this.getWindow().setType(
-      WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
-    this.getWindow().addFlags(
-      WindowManager.LayoutParams.FLAG_FULLSCREEN
-        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-    );*/
-
     super.onAttachedToWindow();
-    //this.getWindow().setType(LayoutParams.TYPE_KEYGUARD_DIALOG);
   }
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -294,15 +268,6 @@ public class LockScreen extends AbstractCameraPreviewActivity
 
   private void init() {
     mLockscreenUtils = new LockscreenUtils();
-//    btnUnlock = (Button) findViewById(R.id.btnUnlock);
-//    btnUnlock.setOnClickListener(new View.OnClickListener() {
-//
-//      @Override
-//      public void onClick(View v) {
-//        // unlock home button and then screen on button press
-//        unlockDevice();
-//      }
-//    });
   }
 
   // Handle events of calls and unlock screen if necessary

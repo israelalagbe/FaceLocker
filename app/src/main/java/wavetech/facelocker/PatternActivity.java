@@ -35,9 +35,8 @@ public class PatternActivity extends AppCompatActivity {
     continueButton=findViewById(R.id.continueBtn);
     mPatternLockView =  findViewById(R.id.pattern_lock_view);
     initializeListeners();
-
-
   }
+  
   private void launchAlternativePincodeActivity(){
     Intent intent=new Intent(PatternActivity.this,PincodeActivity.class);
     startActivity(intent);
@@ -60,16 +59,10 @@ public class PatternActivity extends AppCompatActivity {
 
       @Override
       public void onProgress(List<PatternLockView.Dot> progressPattern) {
-      /*Log.v(getClass().getName(), "Pattern progress: " +
-        PatternLockUtils.patternToString(mPatternLockView, progressPattern));
-      showToastMessage("Pattern progress: " +
-        PatternLockUtils.patternToString(mPatternLockView, progressPattern));*/
       }
 
       @Override
       public void onComplete(List<PatternLockView.Dot> pattern) {
-//      showToastMessage("Pattern complete: " +
-//        PatternLockUtils.patternToString(mPatternLockView, pattern));
         Log.v(getClass().getName(), "Pattern complete: " +
           PatternLockUtils.patternToString(mPatternLockView, pattern));
         passwordStore.setPatternCode(PatternLockUtils.patternToString(mPatternLockView, pattern));
@@ -77,7 +70,7 @@ public class PatternActivity extends AppCompatActivity {
         TourHelper.showTourForView(PatternActivity.this,continueButton,"Save button","Click this button now to go to the next stage" ,new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
           @Override
           public void onTargetClick(TapTargetView view) {
-            super.onTargetClick(view);      // This call is optional
+            super.onTargetClick(view);  
             launchAlternativePincodeActivity();
           }
         });
@@ -86,8 +79,6 @@ public class PatternActivity extends AppCompatActivity {
       @Override
       public void onCleared() {
         Log.v(getClass().getName(), "Pattern has been cleared");
-        //showToastMessage("pattern cleard");
-
         continueButton.setVisibility(View.INVISIBLE);
       }
     };

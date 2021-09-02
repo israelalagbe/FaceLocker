@@ -19,6 +19,7 @@ public class PincodeActivity extends AppCompatActivity {
   private Button btnContinue;
   String pinCodeText="";
   private PasswordStore passwordStore;
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class PincodeActivity extends AppCompatActivity {
           TourHelper.showTourForView(PincodeActivity.this,btnContinue,"Save button","Click this button now to go to the next stage" ,new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
             @Override
             public void onTargetClick(TapTargetView view) {
-              super.onTargetClick(view);      // This call is optional
+              super.onTargetClick(view);
               continueButtonClick();
             }
           });

@@ -30,8 +30,4 @@ abstract  public class AbstractCameraPreviewActivity
   public void onCameraViewStopped() {
 
   }
-
-
-
-
 }

@@ -115,10 +115,6 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
           duplicateMat.release();
           progressLoader.setProgress(faceRegister.getSavedImagesCount()*100/FaceRegister.getMaxImages());
           if(faceRegister.getSavedImagesCount()>=FaceRegister.getMaxImages() ){
-            //faceRegister.trainModels();
-            //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
-            //finish();
-
             this.runOnUiThread(new Runnable() {
               public void run() {
                 isRecognizing=true;
@@ -153,7 +149,7 @@ public class CameraActivity extends AbstractCameraPreviewActivity  {
                         startActivity(intent);
                         dialog.dismiss();
                       }catch (Exception e){
-
+                        Log.e(TAG,"Exception: "+ e.getMessage());
                       }
                     }
                   });

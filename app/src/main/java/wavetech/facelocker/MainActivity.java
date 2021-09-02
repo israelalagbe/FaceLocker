@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         if(checked){
           askForPermissions();
           askForFaceName();
-          //launchPinCodeActivity();
         }
         else{
           passwordStore.reset();
@@ -146,14 +145,13 @@ public class MainActivity extends AppCompatActivity {
     builder.setCancelable(false);
 
 
-// Set up the input
+    // Set up the input
     LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
     View promptView = layoutInflater.inflate(R.layout.dialog_text_input, null);
     builder.setView(promptView);
-    final EditText input = promptView.findViewById(R.id.dialog_input); //new EditText(this);
+    final EditText input = promptView.findViewById(R.id.dialog_input);
     builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int id) {
-        //resultText.setText("Hello, " + editText.getText());
         String faceName = input.getText().toString().trim();
         if(faceName.length()<1) {
           Toast.makeText(MainActivity.this, "Please type in something!", Toast.LENGTH_SHORT).show();
@@ -178,10 +176,12 @@ public class MainActivity extends AppCompatActivity {
     Intent intent=new Intent(MainActivity.this,PatternActivity.class);
     startActivity(intent);
   }
+
   private void launchCameraActivity(){
     Intent intent=new Intent(MainActivity.this,CameraActivity.class);
     startActivity(intent);
   }
+
   private void askForPermissions(){
     askPermissionWithCode(Manifest.permission.CAMERA);
     askPermissionWithCode(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
     askPermissionWithCode(Manifest.permission.REORDER_TASKS);
     askPermissionWithCode(Manifest.permission.FOREGROUND_SERVICE);
   }
+
   private void askPermissionWithCode(String code){
     // Here, thisActivity is the current activity
     if (ContextCompat.checkSelfPermission(this,
@@ -205,17 +206,10 @@ public class MainActivity extends AppCompatActivity {
       if (ActivityCompat.shouldShowRequestPermissionRationale(this,
         code)) {
         // Show an explanation to the user *asynchronously* -- don't block
-        // this thread waiting for the user's response! After the user
-        // sees the explanation, try again to request the permission.
         Toast.makeText(MainActivity.this, "Permission explanation should show", Toast.LENGTH_SHORT).show();
       } else {
         // No explanation needed; request the permission
         ActivityCompat.requestPermissions(this,new String[]{code},80);
-
-
-        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-        // app-defined int constant. The callback method gets the
-        // result of the request.
       }
     }
   }
